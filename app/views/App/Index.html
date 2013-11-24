@@ -1,0 +1,64 @@
+{{template "Public/header.html" .}}
+
+<div class="header">
+  <!-- Logo -->
+  <span class="logo"></span>
+  <!-- /Logo -->
+
+  <!-- 导航菜单 -->
+  <ul class="main-nav">
+    <li {{if eq .controller "App"}}class="current"{{end}}><a href="/">首页</a></li>
+    {{if .menus}}
+      {{$controller := .controller}}<!-- 获取当前控制器 -->
+      {{$action := .action}}<!-- 获取当前动作 -->
+      {{$model := .model}}<!-- 获取当前模型 -->
+      {{range .menus}}
+        <li {{if eq .Controller $controller}}class="current"{{end}}>
+          <a href="{{.Controller}}">{{.Name}}</a>
+        </li>
+      {{end}}
+    {{end}}
+  </ul>
+  <!-- 导航菜单 -->
+
+  <!-- 用户栏 -->
+  <div class="user-bar">
+    {{if .admin_info}}
+      {{$admin_info := .admin_info}}<!-- 获取当前管理员登陆信息 -->
+      {{template "Public/Userbar.html" $admin_info}}
+    {{end}}
+  </div>
+  <!-- 用户栏 -->
+
+</div>
+
+<!-- 主体 -->
+<div id="indexMain" class="index-main">
+  <!-- 插件块 -->
+  <div class="container-span">
+    <!-- 统计块 -->
+    <div class="container-span top-columns cf">
+      {{template "Public/Container.html"}}
+    </div>
+    <!-- 统计块 -->
+
+    <!-- 产品团队 -->
+    <div class="span2">
+      {{template "Public/Products.html"}}
+    </div>
+    <!-- 产品团队 -->
+
+    <!-- 系统信息 -->
+    <div class="span2">
+      {{if .sys_info}}
+        {{with $field := .sys_info}}
+          {{template "Public/Sysinfo.html" $field}}
+        {{end}}
+      {{end}}
+    </div>
+    <!-- 系统信息 -->
+
+  </div>
+</div>
+
+{{template "Public/footer.html" .}}
