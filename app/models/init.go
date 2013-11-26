@@ -18,7 +18,7 @@ func init() {
 //设置数据库
 func SetDB() {
 	path, _ := filepath.Abs("")
-	c, _ := config.ReadDefault(fmt.Sprintf("%s/src/admin/conf/databases.conf", path))
+	c, _ := config.ReadDefault(fmt.Sprintf("%s/admin/conf/databases.conf", path))
 
 	driver, _ := c.String("database", "db.driver")
 	dbname, _ := c.String("database", "db.dbname")
