@@ -1,4 +1,4 @@
 GoCMS
 =====
 
-基于Revel，Jquery,bootstarp的一个后台管理系统
+基于Revel,Jquery,XORM的一个后台管理系统
