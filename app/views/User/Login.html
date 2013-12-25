@@ -13,7 +13,7 @@
             <!-- 主体 -->
             <div class="login-body">
                 <div class="login-main pr">
-                    <form action="{{url "User.LoginPost"}}" method="post" class="login-form">
+                    <form action="{{url "User.Login"}}" method="post" class="login-form">
                         <h3 class="welcome"><i class="login-logo"></i>GoCMS管理平台</h3>
                         <div id="itemBox" class="item-box">
                             <div class="item">
@@ -73,7 +73,7 @@
     			if(data.status==1){
     				window.location.href = data.url;
     			} else {
-    				self.find(".check-tips").text(data.info);
+    				self.find(".check-tips").text(data.message);
     				//刷新验证码
     				$(".reloadverify").click();
     			}

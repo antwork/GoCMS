@@ -4,12 +4,11 @@ package lib
 import "crypto/md5"
 import "encoding/hex"
 import "net"
-import "runtime"
 import "strings"
 import "github.com/robfig/revel"
 
 //返回MD5加密
-func EncryptPassword(s string) string {
+func Md5(s string) string {
 	h := md5.New()
 	h.Write([]byte(s))
 	rs := hex.EncodeToString(h.Sum(nil))
@@ -25,15 +24,4 @@ func GetClientIP() string {
 	}
 	defer conn.Close()
 	return strings.Split(conn.LocalAddr().String(), ":")[0]
-}
-
-//获取系统信息
-func GetSysInfo() map[string]string {
-
-	sysinfo := make(map[string]string)
-	sysinfo["GO_OS"] = runtime.GOOS
-	sysinfo["SERVER_SOFTWARE"] = runtime.Version()
-	sysinfo["MYSQL_VERSION"] = "MySQL 5.7"
-
-	return sysinfo
 }

@@ -5,7 +5,6 @@ import "runtime"
 import "strconv"
 import "github.com/robfig/revel"
 import "admin/app/models"
-import "admin/app/routes"
 
 type Init struct {
 	*revel.Controller
@@ -36,18 +35,16 @@ func CheckLogin(c *Init) revel.Result {
 			UserID, err := strconv.ParseInt(UserID, 10, 64)
 			if err != nil {
 				revel.WARN.Println(err)
-				return c.Redirect(routes.User.Login())
+				return c.Redirect("/User/Login/")
 			}
 
 			admin := new(models.Admin)
 			admin_info := admin.GetById(UserID)
 			if admin_info.Id <= 0 {
-				c.Flash.Error("请先登录")
-				return c.Redirect(routes.User.Login())
+				return c.Redirect("/User/Login/")
 			}
 		} else {
-			c.Flash.Error("请先登录")
-			return c.Redirect(routes.User.Login())
+			return c.Redirect("/User/Login/")
 		}
 	}
 

@@ -17,6 +17,15 @@ func (_ tApp) Index(
 	return revel.MainRouter.Reverse("App.Index", args).Url
 }
 
+func (_ tApp) Main(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("App.Main", args).Url
+}
+
 
 type tInit struct {}
 var Init tInit
@@ -95,6 +104,50 @@ func (_ tPlugin) Index(
 }
 
 
+type tAjax struct {}
+var Ajax tAjax
+
+
+func (_ tAjax) Login(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Ajax.Login", args).Url
+}
+
+func (_ tAjax) Pos(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("Ajax.Pos", args).Url
+}
+
+func (_ tAjax) GetMessage(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Ajax.GetMessage", args).Url
+}
+
+func (_ tAjax) ScreenLock(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Ajax.ScreenLock", args).Url
+}
+
+func (_ tAjax) ScreenUnlock(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("Ajax.ScreenUnlock", args).Url
+}
+
+
 type tCaptcha struct {}
 var Captcha tCaptcha
 
@@ -104,6 +157,75 @@ func (_ tCaptcha) Index(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("Captcha.Index", args).Url
+}
+
+
+type tPublic struct {}
+var Public tPublic
+
+
+func (_ tPublic) Map(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("Public.Map", args).Url
+}
+
+func (_ tPublic) CreateHtml(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Public.CreateHtml", args).Url
+}
+
+func (_ tPublic) Search(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Public.Search", args).Url
+}
+
+
+type tMenu struct {}
+var Menu tMenu
+
+
+func (_ tMenu) Index(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("Menu.Index", args).Url
+}
+
+func (_ tMenu) Add(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("Menu.Add", args).Url
+}
+
+func (_ tMenu) Edit(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("Menu.Edit", args).Url
+}
+
+func (_ tMenu) Delete(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("Menu.Delete", args).Url
 }
 
 
@@ -143,17 +265,12 @@ func (_ tUser) Index(
 }
 
 func (_ tUser) Login(
+		admin interface{},
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "admin", admin)
 	return revel.MainRouter.Reverse("User.Login", args).Url
-}
-
-func (_ tUser) LoginPost(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("User.LoginPost", args).Url
 }
 
 func (_ tUser) Logout(
@@ -161,6 +278,33 @@ func (_ tUser) Logout(
 	args := make(map[string]string)
 	
 	return revel.MainRouter.Reverse("User.Logout", args).Url
+}
+
+func (_ tUser) EditInfo(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("User.EditInfo", args).Url
+}
+
+func (_ tUser) EditPwd(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("User.EditPwd", args).Url
+}
+
+func (_ tUser) Left(
+		menu interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "menu", menu)
+	return revel.MainRouter.Reverse("User.Left", args).Url
 }
 
 

@@ -33,8 +33,8 @@ func SetDB() {
 	if err != nil {
 		revel.WARN.Printf("错误: %v", err)
 	}
-	cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
-	Engine.SetDefaultCacher(cacher)
+	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
+	//Engine.SetDefaultCacher(cacher)
 	//控制台打印SQL语句
 	//Engine.ShowSQL = true
 }

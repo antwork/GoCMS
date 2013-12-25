@@ -2,10 +2,8 @@ package controllers
 
 //后台首页
 import "strconv"
-import "admin/lib"
 import "github.com/robfig/revel"
 import "admin/app/models"
-import "admin/app/routes"
 
 type App struct {
 	*revel.Controller
@@ -21,35 +19,45 @@ func (c App) Index(admin *models.Admin) revel.Result {
 			revel.WARN.Println(err)
 		}
 
-		admin := new(models.Admin)
 		admin_info := admin.GetById(UserID)
 		if admin_info.Id <= 0 {
-			c.Flash.Error("请先登录")
-			return c.Redirect(routes.User.Login())
+			return c.Redirect("/User/Login")
 		}
 
 		//控制器
-		c.RenderArgs["controller"] = c.Name
+		c.RenderArgs["Controller"] = c.Name
 		//动作
 		c.RenderArgs["action"] = c.Action
 		//模型
-		c.RenderArgs["model"] = c.MethodName
+		c.RenderArgs["Model"] = c.MethodName
 
 		//导航菜单
 		menu := new(models.Menu)
-		c.RenderArgs["menus"] = menu.GetMenuAll(0, true)
+		c.RenderArgs["menus"] = menu.GetAdminMenu(0, false)
 
 		//登陆用户信息
 		c.RenderArgs["admin_info"] = admin_info
 
+		//是否锁屏
+		if c.Session["lock_screen"] == "" || c.Session["lock_screen"] == "0" {
+			c.RenderArgs["lock_screen"] = "0"
+		} else {
+			c.RenderArgs["lock_screen"] = "1"
+		}
+
 	} else {
-		c.Flash.Error("请先登录")
-		return c.Redirect(routes.User.Login())
+		return c.Redirect("/User/Login/")
 	}
 
-	//系统信息
-	sys_info := lib.GetSysInfo()
-
-	c.Render(title, sys_info)
+	c.Render(title)
 	return c.RenderTemplate("App/Index.html")
+}
+
+func (c App) Main(admin *models.Admin) revel.Result {
+
+	title := "首页--GoCMS管理系统"
+
+	c.Render(title)
+
+	return c.RenderTemplate("App/Main.html")
 }

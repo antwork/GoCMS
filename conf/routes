@@ -6,39 +6,58 @@ module:testrunner
 
 # 后台首页
 GET     /                                       App.Index
-GET     /App                                    App.Index
+GET     /App/                                   App.Index
+GET     /Main/                                  App.Main
 
 # 设置
-GET     /Setting                              	Setting.Index
+GET     /Setting/                              	Setting.Index
+
+#菜单管理
+GET     /Menu/                              	Menu.Index
+GET     /Menu/add/                          	Menu.Add
+GET     /Menu/add/:id/                          Menu.Add
+GET     /Menu/edit/                         	Menu.Edit
+GET     /Menu/edit/:id/                         Menu.Edit
 
 # 我的面板
-GET     /Panel                              	Panel.Index
+GET     /Panel/                              	Panel.Index
+GET     /EditInfo/                              User.EditInfo
+POST    /EditInfo/                              User.EditInfo
+GET     /EditPwd/                               User.EditPwd
+POST    /EditPwd/                               User.EditPwd
 
 # 模块
-GET     /Module                              	Module.Index
+GET     /Module/                              	Module.Index
 
 # 内容
-GET     /Content                              	Content.Index
+GET     /Content/                              	Content.Index
 
 # 用户
-GET     /User                              		User.Index
+GET     /User/                              	User.Index
 
 # 扩展
-GET     /Extend                              	Extend.Index
+GET     /Extend/                              	Extend.Index
 
 # 界面
-GET     /Style                              	Style.Index
+GET     /Style/                              	Style.Index
 
 # 应用
-GET     /Plugin                              	Plugin.Index
+GET     /Plugin/                              	Plugin.Index
 
 # 登陆页面
-GET     /Login                                  User.Login
-GET     /Logout                                 User.Logout
-POST    /Login                        			User.LoginPost
+GET     /Login/                                 User.Login
+POST    /Login/                        			User.Login
+GET     /Logout/                                User.Logout
+GET     /Left/                              	User.Left
+POST    /Left/                              	User.Left
 
 #验证码
-GET     /Captcha                       			Captcha.Index
+GET     /Captcha/                       		Captcha.Index
+
+#公共
+GET     /Map/                       			Public.Map
+GET     /CreateHtml/                       		Public.CreateHtml
+GET     /Search/                       			Public.Search
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

@@ -47,9 +47,19 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					53: []string{ 
+					52: []string{ 
 						"title",
-						"sys_info",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Main",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					60: []string{ 
+						"title",
 					},
 				},
 			},
@@ -68,7 +78,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					13: []string{ 
 						"title",
 					},
 				},
@@ -83,7 +93,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					13: []string{ 
 						"title",
 					},
 				},
@@ -112,7 +122,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					13: []string{ 
 						"title",
 					},
 				},
@@ -127,7 +137,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					13: []string{ 
 						"title",
 					},
 				},
@@ -142,9 +152,53 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					13: []string{ 
 						"title",
 					},
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers6.Ajax)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Login",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					15: []string{ 
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Pos",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "GetMessage",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "ScreenLock",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "ScreenUnlock",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
 				},
 			},
 			
@@ -162,6 +216,98 @@ func main() {
 			
 		})
 	
+	revel.RegisterController((*controllers6.Public)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Map",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					13: []string{ 
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "CreateHtml",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					19: []string{ 
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Search",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					25: []string{ 
+					},
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers7.Menu)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					18: []string{ 
+						"title",
+						"menus",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Add",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					38: []string{ 
+						"title",
+						"menus",
+						"Id",
+					},
+					42: []string{ 
+						"title",
+						"menus",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Edit",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					121: []string{ 
+						"title",
+						"menus",
+						"menu_info",
+					},
+					127: []string{ 
+						"title",
+						"menus",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Delete",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
 	revel.RegisterController((*controllers7.Setting)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -169,7 +315,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					14: []string{ 
 						"title",
 					},
 				},
@@ -184,7 +330,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					13: []string{ 
 						"title",
 					},
 				},
@@ -199,24 +345,20 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					16: []string{ 
+					17: []string{ 
+						"title",
 					},
 				},
 			},
 			&revel.MethodType{
 				Name: "Login",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					21: []string{ 
+					25: []string{ 
+						"title",
 					},
-				},
-			},
-			&revel.MethodType{
-				Name: "LoginPost",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
 				},
 			},
 			&revel.MethodType{
@@ -224,6 +366,48 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "EditInfo",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					96: []string{ 
+						"title",
+						"admin_info",
+					},
+					98: []string{ 
+						"title",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "EditPwd",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					141: []string{ 
+						"title",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Left",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					200: []string{ 
+						"title",
+						"left_menu",
+					},
+					206: []string{ 
+						"title",
+						"left_menu",
+					},
 				},
 			},
 			
@@ -297,9 +481,11 @@ func main() {
 			62: "a.Password",
 		},
 		"admin/app/models.(*Menu).Validate": { 
-			20: "m.Name",
-			21: "m.Pid",
-			22: "m.Controller",
+			19: "menu.Name",
+			20: "menu.Name",
+			21: "menu.Pid",
+			22: "menu.Url",
+			23: "menu.Order",
 		},
 		"admin/app/models.(*Password).ValidatePassword": { 
 			67: "P.Password",

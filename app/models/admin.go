@@ -136,7 +136,7 @@ func (a *Admin) Save() bool {
 
 	admin := new(Admin)
 	admin.Username = a.Username
-	admin.Password = lib.EncryptPassword(a.Password)
+	admin.Password = lib.Md5(a.Password)
 	admin.Roleid = a.Roleid
 	admin.Lastloginip = lib.GetClientIP()
 	admin.Email = a.Email
@@ -163,7 +163,7 @@ func (a *Admin) Edit(Id int64) bool {
 	}
 
 	if len(a.Password) > 0 {
-		a.Password = lib.EncryptPassword(a.Password)
+		a.Password = lib.Md5(a.Password)
 	}
 
 	if a.Roleid > 0 {
