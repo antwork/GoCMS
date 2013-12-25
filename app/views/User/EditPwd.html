@@ -1,0 +1,55 @@
+{{template "public/header.html" .}}
+<script language="javascript" src="/public/js/menu.js"></script>
+
+<body>
+	<div class="subnav">
+		<div class="content-menu ib-a blue line-x">
+			<a href='javascript:;' class="on"><em>修改密码</em></a>
+		</div>
+	</div>
+	<div class="pad_10">
+		<div class="common-form">
+			<form name="myform" action="{{url "User.EditPwd"}}" method="post"
+				id="myform">
+				<table width="100%" class="table_form contentWrap">
+					<tr>
+						<td width="80"><strong>用户名：</strong></td>
+						<td>
+							zzdboy (真实姓名 张仲东)
+						</td>
+					</tr>
+
+					<tr>
+						<td><strong><strong>电子邮件：</strong></td>
+						<td>
+							zzdboy1616@163.com
+						</td>
+					</tr>
+
+					<tr>
+						<td><strong>旧密码：</strong></td>
+						<td><input type="password" name="old_password"
+							id="old_password" class="input-text"></input></td>
+					</tr>
+
+					<tr>
+
+						<td><strong>新密码：</strong></td>
+						<td><input type="password" name="new_password"
+							id="new_password" class="input-text"></input></td>
+					</tr>
+					<tr>
+						<td><strong>重复新密码：</strong></td>
+						<td><input type="password" name="new_pwdconfirm"
+							id="new_pwdconfirm" class="input-text"></input></td>
+					</tr>
+				</table>
+				<div class="bk15"></div>
+				<input name="dosubmit" type="submit" value="提 交" class="button"
+					id="dosubmit">
+			</form>
+		</div>
+	</div>
+</body>
+
+{{template "public/footer.html" .}}

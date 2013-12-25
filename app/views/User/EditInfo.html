@@ -1,0 +1,63 @@
+{{template "public/header.html" .}}
+<script language="javascript" src="/public/js/menu.js"></script>
+
+<body>
+	<div class="subnav">
+		<div class="content-menu ib-a blue line-x">
+			<a href='javascript:;' class="on"><em>个人信息</em></a>
+		</div>
+	</div>
+	<div class="pad_10">
+		<div class="common-form">
+			<form name="myform" action="{{url "User.EditInfo"}}" method="post" id="myform">
+				{{if .admin_info}}
+					{{with .admin_info}}
+					<table width="100%" class="table_form contentWrap">
+						<tr>
+							<td width="100"><strong>用户名：</strong></td>
+							<td>{{.Username}}</td>
+						</tr>
+
+						<tr>
+							<td width="80"><strong>最后登录时间：</strong></td>
+							<td>{{.Lastlogintime}}</td>
+						</tr>
+
+						<tr>
+							<td width="80"><strong>最后登录IP：</strong></td>
+							<td>{{.Lastloginip}}</td>
+						</tr>
+
+						<tr>
+							<td><strong>真实姓名：</strong></td>
+							<td>
+								<input type="text" name="realname" id="realname" 
+									class="input-text" size="30" value="{{.Realname}}"></input>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>电子邮件：</strong></td>
+							<td><input type="text" name="email" id="email"
+								class="input-text" size="40"
+								value="{{.Email}}"></input>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>语言：</strong></td>
+							<td><select id="lang" name="lang">
+									<option {{if eq .Lang "zh-cn"}}selected{{end}} value="zh-cn">中文 - 简体中文</option>
+									<option {{if eq .Lang "en"}}selected{{end}} value="en">English</option>
+							</select></td>
+						</tr>
+					</table>
+					{{end}}
+				{{end}}
+				<div class="bk15"></div>
+				<input name="dosubmit" type="submit" value="提 交" class="button" id="dosubmit">
+			</form>
+
+		</div>
+	</div>
+</body>
+
+{{template "public/footer.html" .}}
