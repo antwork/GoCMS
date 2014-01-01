@@ -10,7 +10,11 @@ type Public struct {
 
 //后台地图
 func (c *Public) Map(menu *models.Menu) revel.Result {
-	c.Render()
+
+	//返回后台地图
+	map_html := menu.GetMenuMap()
+
+	c.Render(map_html)
 	return c.RenderTemplate("Public/map.html")
 }
 
@@ -24,4 +28,10 @@ func (c *Public) CreateHtml() revel.Result {
 func (c *Public) Search() revel.Result {
 	c.Render()
 	return c.RenderTemplate("Public/search.html")
+}
+
+//消息提示
+func (c *Public) Message() revel.Result {
+	c.Render()
+	return c.RenderTemplate("Public/message.html")
 }

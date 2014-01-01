@@ -1,5 +1,5 @@
 {{template "public/header.html" .}}
-<script language="javascript" src="/public/js/menu.js"></script>
+<script language="javascript" src="/public/js/editpwd.js"></script>
 
 <body>
 	<div class="subnav">
@@ -9,7 +9,7 @@
 	</div>
 	<div class="pad_10">
 		<div class="common-form">
-			<form name="myform" action="{{url "User.EditPwd"}}" method="post"
+			<form name="myform" action="{{url "User.EditPwd"}}" method="post" onsubmit="return form_submit()"
 				id="myform">
 				<table width="100%" class="table_form contentWrap">
 					<tr>

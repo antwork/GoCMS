@@ -60,8 +60,11 @@ func (c *User) Login(admin *models.Admin) revel.Result {
 		} else if username == admin_info.Username && lib.Md5(password) == admin_info.Password {
 			c.Session["UserID"] = fmt.Sprintf("%d", admin_info.Id)
 
+			c.Flash.Success("欢迎您 " + admin_info.Realname)
+			c.Flash.Out["url"] = "/"
+
 			data["status"] = "1"
-			data["url"] = "/"
+			data["url"] = "/Message/"
 			data["message"] = "登陆成功!"
 		} else {
 			data["status"] = "0"
@@ -78,7 +81,10 @@ func (c *User) Logout() revel.Result {
 	for k := range c.Session {
 		delete(c.Session, k)
 	}
-	return c.Redirect("/User/Login/")
+
+	c.Flash.Success("安全退出")
+	c.Flash.Out["url"] = "/User/Login/"
+	return c.Redirect("/Message/")
 }
 
 //个人信息
@@ -104,16 +110,28 @@ func (c *User) EditInfo(admin *models.Admin) revel.Result {
 		var realname string = c.Params.Get("realname")
 		if len(realname) > 0 {
 			admin.Realname = realname
+		} else {
+			c.Flash.Error("请输入真实姓名!")
+			c.Flash.Out["url"] = "/EditInfo/"
+			return c.Redirect("/Message/")
 		}
 
 		var email string = c.Params.Get("email")
 		if len(email) > 0 {
 			admin.Email = email
+		} else {
+			c.Flash.Error("请输入电子邮件!")
+			c.Flash.Out["url"] = "/EditInfo/"
+			return c.Redirect("/Message/")
 		}
 
 		var lang string = c.Params.Get("lang")
 		if len(lang) > 0 {
 			admin.Lang = lang
+		} else {
+			c.Flash.Error("请选择语言!")
+			c.Flash.Out["url"] = "/EditInfo/"
+			return c.Redirect("/Message/")
 		}
 
 		if UserID, ok := c.Session["UserID"]; ok {
@@ -123,12 +141,18 @@ func (c *User) EditInfo(admin *models.Admin) revel.Result {
 			}
 
 			if admin.Edit(UserID) {
-				return c.Redirect("/User/EditInfo/")
+				c.Flash.Success("修改成功!")
+				c.Flash.Out["url"] = "/EditInfo/"
+				return c.Redirect("/Message/")
 			} else {
-				return c.Redirect("/User/EditInfo/")
+				c.Flash.Error("修改失败!")
+				c.Flash.Out["url"] = "/EditInfo/"
+				return c.Redirect("/Message/")
 			}
 		} else {
-			return c.Redirect("/User/EditInfo/")
+			c.Flash.Error("未登陆，请先登陆!")
+			c.Flash.Out["url"] = "/"
+			return c.Redirect("/Message/")
 		}
 	}
 }
@@ -154,31 +178,53 @@ func (c *User) EditPwd(admin *models.Admin) revel.Result {
 
 			var old_password string = c.Params.Get("old_password")
 			if len(old_password) > 0 {
-
-			}
-
-			if admin_info.Password != lib.Md5(old_password) {
+				if admin_info.Password != lib.Md5(old_password) {
+					c.Flash.Error("旧密码不正确!")
+					c.Flash.Out["url"] = "/EditPwd/"
+					return c.Redirect("/Message/")
+				}
+			} else {
 				return c.Redirect("/User/EditPwd/")
 			}
 
 			var new_password string = c.Params.Get("new_password")
 			if len(new_password) > 0 {
 
+			} else {
+				c.Flash.Error("新密码不能为空!")
+				c.Flash.Out["url"] = "/EditPwd/"
+				return c.Redirect("/Message/")
 			}
 
 			var new_pwdconfirm string = c.Params.Get("new_pwdconfirm")
 			if len(new_pwdconfirm) > 0 {
-
+				if new_pwdconfirm != new_password {
+					c.Flash.Error("两次输入密码入不一致!")
+					c.Flash.Out["url"] = "/EditPwd/"
+					return c.Redirect("/Message/")
+				} else {
+					admin.Password = new_pwdconfirm
+				}
+			} else {
+				c.Flash.Error("请输入重复新密码!")
+				c.Flash.Out["url"] = "/EditPwd/"
+				return c.Redirect("/Message/")
 			}
 
 			if admin.Edit(UserID) {
-				return c.Redirect("/User/EditPwd/")
+				c.Flash.Success("修改成功!")
+				c.Flash.Out["url"] = "/EditPwd/"
+				return c.Redirect("/Message/")
 			} else {
-				return c.Redirect("/User/EditPwd/")
+				c.Flash.Error("修改失败!")
+				c.Flash.Out["url"] = "/EditPwd/"
+				return c.Redirect("/Message/")
 			}
+		} else {
+			c.Flash.Error("未登陆，请先登陆!")
+			c.Flash.Out["url"] = "/"
+			return c.Redirect("/Message/")
 		}
-
-		return c.Redirect("/User/EditPwd/")
 	}
 }
 

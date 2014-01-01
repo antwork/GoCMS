@@ -231,6 +231,50 @@ func (m *Menu) GetMenuOptionHtml(Id int64) template.HTML {
 	return template.HTML(Html)
 }
 
+//返回后台地图
+func (m *Menu) GetMenuMap() template.HTML {
+	menus := make([]*Menu, 0)
+	Engine.Asc("order").Find(&menus)
+
+	//初始化菜单Map
+	menu_list := make(map[int64][]*Menu)
+
+	for _, menu := range menus {
+		if _, ok := menu_list[menu.Pid]; !ok {
+			menu_list[menu.Pid] = make([]*Menu, 0)
+		}
+		menu_list[menu.Pid] = append(menu_list[menu.Pid], menu)
+	}
+
+	Html := ""
+	n := 1
+	for _, menu := range menu_list[0] {
+		if n == 1 {
+			Html += "<div class=\"map-menu lf\">"
+		}
+
+		Html += "<ul>"
+		Html += "<li class=\"title\">" + menu.Name + "</li>"
+
+		for _, menu_second := range menu_list[menu.Id] {
+			Html += "<li class=\"title2\">" + menu_second.Name + "</li>"
+
+			for _, menu_last := range menu_list[menu_second.Id] {
+				Html += "<li><a href=\"javascript:Go(" + strconv.FormatInt(menu_last.Id, 10) + ",'" + menu_last.Url + "')\">" + menu_last.Name + "</a></li>"
+			}
+		}
+
+		Html += "</ul>"
+
+		if n%2 == 0 {
+			Html += "</div><div class=\"map-menu lf\">"
+		}
+		n++
+	}
+
+	return template.HTML(Html)
+}
+
 //获取所有菜单
 //返回HTML
 func (m *Menu) GetMenuHtml() template.HTML {

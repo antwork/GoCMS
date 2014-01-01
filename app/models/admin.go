@@ -163,7 +163,7 @@ func (a *Admin) Edit(Id int64) bool {
 	}
 
 	if len(a.Password) > 0 {
-		a.Password = lib.Md5(a.Password)
+		admin.Password = lib.Md5(a.Password)
 	}
 
 	if a.Roleid > 0 {

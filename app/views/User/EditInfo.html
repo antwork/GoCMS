@@ -1,5 +1,5 @@
 {{template "public/header.html" .}}
-<script language="javascript" src="/public/js/menu.js"></script>
+<script language="javascript" src="/public/js/editinfo.js"></script>
 
 <body>
 	<div class="subnav">
@@ -9,7 +9,7 @@
 	</div>
 	<div class="pad_10">
 		<div class="common-form">
-			<form name="myform" action="{{url "User.EditInfo"}}" method="post" id="myform">
+			<form name="myform" action="{{url "User.EditInfo"}}" method="post" onsubmit="return form_submit()" id="myform">
 				{{if .admin_info}}
 					{{with .admin_info}}
 					<table width="100%" class="table_form contentWrap">

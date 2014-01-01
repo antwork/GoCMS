@@ -19,9 +19,9 @@ import (
 	controllers9 "admin/app/controllers/User"
 	models "admin/app/models"
 	tests "admin/tests"
-	controllers11 "github.com/robfig/revel/modules/static/app/controllers"
+	controllers10 "github.com/robfig/revel/modules/static/app/controllers"
 	_ "github.com/robfig/revel/modules/testrunner/app"
-	controllers10 "github.com/robfig/revel/modules/testrunner/app/controllers"
+	controllers11 "github.com/robfig/revel/modules/testrunner/app/controllers"
 )
 
 var (
@@ -224,7 +224,8 @@ func main() {
 					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					13: []string{ 
+					17: []string{ 
+						"map_html",
 					},
 				},
 			},
@@ -233,7 +234,7 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					19: []string{ 
+					23: []string{ 
 					},
 				},
 			},
@@ -242,7 +243,16 @@ func main() {
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					25: []string{ 
+					29: []string{ 
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Message",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+					35: []string{ 
 					},
 				},
 			},
@@ -286,12 +296,12 @@ func main() {
 					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					121: []string{ 
+					138: []string{ 
 						"title",
 						"menus",
 						"menu_info",
 					},
-					127: []string{ 
+					144: []string{ 
 						"title",
 						"menus",
 					},
@@ -374,11 +384,11 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					96: []string{ 
+					102: []string{ 
 						"title",
 						"admin_info",
 					},
-					98: []string{ 
+					104: []string{ 
 						"title",
 					},
 				},
@@ -389,7 +399,7 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					141: []string{ 
+					165: []string{ 
 						"title",
 					},
 				},
@@ -400,11 +410,11 @@ func main() {
 					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					200: []string{ 
+					246: []string{ 
 						"title",
 						"left_menu",
 					},
-					206: []string{ 
+					252: []string{ 
 						"title",
 						"left_menu",
 					},
@@ -413,7 +423,31 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers10.TestRunner)(nil),
+	revel.RegisterController((*controllers10.Static)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Serve",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "prefix", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "filepath", Type: reflect.TypeOf((*string)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "ServeModule",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "moduleName", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "prefix", Type: reflect.TypeOf((*string)(nil)) },
+					&revel.MethodArg{Name: "filepath", Type: reflect.TypeOf((*string)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers11.TestRunner)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -440,30 +474,6 @@ func main() {
 			&revel.MethodType{
 				Name: "List",
 				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			
-		})
-	
-	revel.RegisterController((*controllers11.Static)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Serve",
-				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "prefix", Type: reflect.TypeOf((*string)(nil)) },
-					&revel.MethodArg{Name: "filepath", Type: reflect.TypeOf((*string)(nil)) },
-				},
-				RenderArgNames: map[int][]string{ 
-				},
-			},
-			&revel.MethodType{
-				Name: "ServeModule",
-				Args: []*revel.MethodArg{ 
-					&revel.MethodArg{Name: "moduleName", Type: reflect.TypeOf((*string)(nil)) },
-					&revel.MethodArg{Name: "prefix", Type: reflect.TypeOf((*string)(nil)) },
-					&revel.MethodArg{Name: "filepath", Type: reflect.TypeOf((*string)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},

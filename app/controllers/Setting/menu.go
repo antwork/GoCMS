@@ -52,13 +52,29 @@ func (c Menu) Add(menu *models.Menu) revel.Result {
 				revel.WARN.Println(err)
 			}
 			menu.Pid = Pid
+		} else {
+			c.Flash.Error("请选择父菜单!")
+			c.Flash.Out["url"] = "/Menu/Add/"
+			return c.Redirect("/Message/")
 		}
 
 		var name string = c.Params.Get("name")
-		menu.Name = name
+		if len(name) > 0 {
+			menu.Name = name
+		} else {
+			c.Flash.Error("请输入菜单名称!")
+			c.Flash.Out["url"] = "/Menu/Add/"
+			return c.Redirect("/Message/")
+		}
 
 		var url string = c.Params.Get("url")
-		menu.Url = url
+		if len(url) > 0 {
+			menu.Url = url
+		} else {
+			c.Flash.Error("请输入菜单地址!")
+			c.Flash.Out["url"] = "/Menu/Add/"
+			return c.Redirect("/Message/")
+		}
 
 		var order string = c.Params.Get("order")
 		if len(order) > 0 {
@@ -67,6 +83,10 @@ func (c Menu) Add(menu *models.Menu) revel.Result {
 				revel.WARN.Println(err)
 			}
 			menu.Order = Order
+		} else {
+			c.Flash.Error("请输入排序!")
+			c.Flash.Out["url"] = "/Menu/Add/"
+			return c.Redirect("/Message/")
 		}
 
 		var data string = c.Params.Get("data")
@@ -79,23 +99,20 @@ func (c Menu) Add(menu *models.Menu) revel.Result {
 				revel.WARN.Println(err)
 			}
 			menu.Display = Display
-		}
-
-		//验证数据
-		menu.Validate(c.Validation)
-
-		if c.Validation.HasErrors() {
-			c.Validation.Keep()
-			c.FlashParams()
-			return c.Redirect("/Menu/Add/")
+		} else {
+			c.Flash.Error("请选择是否显示菜单!")
+			c.Flash.Out["url"] = "/Menu/Add/"
+			return c.Redirect("/Message/")
 		}
 
 		if menu.Save() {
 			c.Flash.Success("添加菜单成功")
-			return c.Redirect("/Menu/")
+			c.Flash.Out["url"] = "/Menu/"
+			return c.Redirect("/Message/")
 		} else {
 			c.Flash.Error("添加菜单失败")
-			return c.Redirect("/Menu/Add/")
+			c.Flash.Out["url"] = "/Menu/Add/"
+			return c.Redirect("/Message/")
 		}
 	}
 }
@@ -129,51 +146,6 @@ func (c Menu) Edit(menu *models.Menu) revel.Result {
 		return c.RenderTemplate("Setting/Menu/Edit.html")
 	} else {
 
-		var pid string = c.Params.Get("pid")
-		if len(pid) > 0 {
-			Pid, err := strconv.ParseInt(pid, 10, 64)
-			if err != nil {
-				revel.WARN.Println(err)
-			}
-			menu.Pid = Pid
-		}
-
-		var name string = c.Params.Get("name")
-		menu.Name = name
-
-		var url string = c.Params.Get("url")
-		menu.Url = url
-
-		var order string = c.Params.Get("order")
-		if len(order) > 0 {
-			Order, err := strconv.ParseInt(order, 10, 16)
-			if err != nil {
-				revel.WARN.Println(err)
-			}
-			menu.Order = Order
-		}
-
-		var data string = c.Params.Get("data")
-		menu.Data = data
-
-		var display string = c.Params.Get("display")
-		if len(display) > 0 {
-			Display, err := strconv.ParseInt(display, 10, 8)
-			if err != nil {
-				revel.WARN.Println(err)
-			}
-			menu.Display = Display
-		}
-
-		//验证数据
-		menu.Validate(c.Validation)
-
-		if c.Validation.HasErrors() {
-			c.Validation.Keep()
-			c.FlashParams()
-			return c.Redirect("/Menu/Edit/")
-		}
-
 		var id string = c.Params.Get("id")
 		if len(id) > 0 {
 			Id, err := strconv.ParseInt(id, 10, 64)
@@ -181,12 +153,74 @@ func (c Menu) Edit(menu *models.Menu) revel.Result {
 				revel.WARN.Println(err)
 			}
 
+			var pid string = c.Params.Get("pid")
+			if len(pid) > 0 {
+				Pid, err := strconv.ParseInt(pid, 10, 64)
+				if err != nil {
+					revel.WARN.Println(err)
+				}
+				menu.Pid = Pid
+			} else {
+				c.Flash.Error("请选择父菜单!")
+				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				return c.Redirect("/Message/")
+			}
+
+			var name string = c.Params.Get("name")
+			if len(name) > 0 {
+				menu.Name = name
+			} else {
+				c.Flash.Error("请输入菜单名称!")
+				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				return c.Redirect("/Message/")
+			}
+
+			var url string = c.Params.Get("url")
+			if len(url) > 0 {
+				menu.Url = url
+			} else {
+				c.Flash.Error("请输入菜单地址!")
+				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				return c.Redirect("/Message/")
+			}
+
+			var order string = c.Params.Get("order")
+			if len(order) > 0 {
+				Order, err := strconv.ParseInt(order, 10, 16)
+				if err != nil {
+					revel.WARN.Println(err)
+				}
+				menu.Order = Order
+			} else {
+				c.Flash.Error("请输入排序!")
+				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				return c.Redirect("/Message/")
+			}
+
+			var data string = c.Params.Get("data")
+			menu.Data = data
+
+			var display string = c.Params.Get("display")
+			if len(display) > 0 {
+				Display, err := strconv.ParseInt(display, 10, 8)
+				if err != nil {
+					revel.WARN.Println(err)
+				}
+				menu.Display = Display
+			} else {
+				c.Flash.Error("请选择是否显示菜单!")
+				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				return c.Redirect("/Message/")
+			}
+
 			if menu.Edit(Id) {
 				c.Flash.Success("编辑菜单成功")
-				return c.Redirect("/Menu/")
+				c.Flash.Out["url"] = "/Menu/"
+				return c.Redirect("/Message/")
 			} else {
 				c.Flash.Error("编辑菜单失败")
-				return c.Redirect("/Menu/Edit/%d/", Id)
+				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				return c.Redirect("/Message/")
 			}
 		} else {
 			c.Flash.Error("编辑菜单失败")

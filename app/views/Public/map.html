@@ -1,5 +1,7 @@
+{{template "public/header.html" .}}
+
 <body>
-	<div class="pad-10"></div>
+	<div class="pad-10">{{if .map_html}}{{.map_html}}{{end}}</div>
 	<script type="text/javascript">
 	<!--
 		function Go(id, targetUrl) {
@@ -11,3 +13,5 @@
 	//-->
 	</script>
 </body>
+
+{{template "public/footer.html" .}}

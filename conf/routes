@@ -58,6 +58,7 @@ GET     /Captcha/                       		Captcha.Index
 GET     /Map/                       			Public.Map
 GET     /CreateHtml/                       		Public.CreateHtml
 GET     /Search/                       			Public.Search
+GET     /Message/                       		Public.Message
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
