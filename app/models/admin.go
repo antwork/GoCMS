@@ -7,10 +7,11 @@ import "regexp"
 import "github.com/robfig/revel"
 
 type Admin struct {
-	Id            int64  `xorm:"pk"`
-	Username      string `xorm:"unique varchar(255)"`
+	Id            int64  `xorm:"pk autoincr"`
+	Username      string `xorm:"unique index varchar(255)"`
 	Password      string `xorm:"varchar:(32)"`
-	Roleid        int64
+	Roleid        int64  `xorm:"index"`
+	Role          *Role  `xorm:"- <- ->"`
 	Lastloginip   string `xorm:"varchar(32)"`
 	Lastlogintime string `xorm:"varchar(32)"`
 	Email         string `xorm:"varchar(32)"`
@@ -21,10 +22,6 @@ type Admin struct {
 type Password struct {
 	Password        string
 	PasswordConfirm string
-}
-
-func init() {
-
 }
 
 func (a *Admin) Validate(v *revel.Validation) {
@@ -69,6 +66,27 @@ func (P *Password) ValidatePassword(v *revel.Validation) {
 
 	v.MinSize(P.Password, 6).Message("密码最少六位")
 	v.Required(P.Password == P.PasswordConfirm).Message("两次密码不相同!")
+}
+
+//获取管理员列表
+func (a *Admin) GetByAll(RoleId int64) []*Admin {
+	admin_list := []*Admin{}
+
+	if RoleId > 0 {
+		Engine.Where("roleid=?", RoleId).Find(&admin_list)
+	} else {
+		Engine.Find(&admin_list)
+	}
+
+	if len(admin_list) > 0 {
+		role := new(Role)
+
+		for i, v := range admin_list {
+			admin_list[i].Role = role.GetById(v.Roleid)
+		}
+	}
+
+	return admin_list
 }
 
 func (a *Admin) HasName() bool {

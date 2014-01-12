@@ -1,0 +1,54 @@
+{{template "public/header.html" .}}
+<script language="javascript" src="/public/js/role.js"></script>
+
+<body>
+	<div class="subnav">
+		<div class="content-menu ib-a blue line-x">
+			<a href='javascript:;' class="on"><em>角色管理</em></a><span>|</span><a
+				href='/Role/add/'><em>添加角色</em></a>
+		</div>
+	</div>
+	<div class="table-list pad-lr-10">
+		<table width="100%" cellspacing="0">
+			<thead>
+				<tr>
+					<th width="10%">ID</th>
+					<th width="15%" align="left">角色名称</th>
+					<!--<th width="15%" align="left">所属权限</th>-->
+					<th width="26%" align="left">角色描述</th>
+					<th width="5%" align="left">状态</th>
+					<th class="text-c">管理操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{if .role_list}}
+					{{range .role_list}}
+					<tr>
+						<td width="5%" align="center">{{.Id}}</td>
+						<td width="30%">{{.Rolename}}</td>
+						<!--<td width="30%">{{.Data}}</td>-->
+						<td width="10%">{{.Desc}}</td>
+						<td width="5%">
+							{{if eq .Status 1}}
+								<a href="javascript:;" onclick="setStatus({{.Id}},0);"><font color="red">√</font></a>
+							{{else}}
+								<a href="javascript:;" onclick="setStatus({{.Id}},1);"><font color="blue">×</font></a>
+							{{end}}
+						</td>
+						<td class="text-c">
+							<a href="/Role/member/{{.Id}}/">成员管理</a> | 
+							<a href="/Role/edit/{{.Id}}/">修改</a> | 
+							{{if eq .Id 1}}
+								<font color="#cccccc">删除</font>
+							{{else}}
+								<a href="javascript:;" onclick="delete_role({{.Id}})">删除</a>
+							{{end}}
+						</td>
+					</tr>
+					{{end}}
+				{{end}}
+			</tbody>
+		</table>
+	</div>
+</body>
+{{template "public/footer.html" .}}

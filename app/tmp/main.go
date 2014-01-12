@@ -259,6 +259,60 @@ func main() {
 			
 		})
 	
+	revel.RegisterController((*controllers7.Admin)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					18: []string{ 
+						"title",
+						"admin_list",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Add",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					31: []string{ 
+						"title",
+						"role_list",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Edit",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					138: []string{ 
+						"title",
+						"admin_info",
+						"role_list",
+					},
+					140: []string{ 
+						"title",
+						"role_list",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Delete",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
 	revel.RegisterController((*controllers7.Menu)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
@@ -311,6 +365,84 @@ func main() {
 				Name: "Delete",
 				Args: []*revel.MethodArg{ 
 					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers7.Role)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					18: []string{ 
+						"title",
+						"role_list",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Member",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					38: []string{ 
+						"title",
+						"admin_list",
+					},
+					40: []string{ 
+						"title",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Add",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					55: []string{ 
+						"title",
+						"tree",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "Edit",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					129: []string{ 
+						"title",
+						"role_info",
+						"tree",
+						"Id",
+					},
+					135: []string{ 
+						"title",
+						"tree",
+					},
+				},
+			},
+			&revel.MethodType{
+				Name: "SetStatus",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
+			&revel.MethodType{
+				Name: "Delete",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -483,25 +615,25 @@ func main() {
 	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"admin/app/models.(*Admin).Validate": { 
-			31: "a.Username",
-			32: "a.Username",
-			46: "a.Email",
-			47: "a.Email",
-			61: "a.Password",
-			62: "a.Password",
+			28: "a.Username",
+			29: "a.Username",
+			43: "a.Email",
+			44: "a.Email",
+			58: "a.Password",
+			59: "a.Password",
 		},
 		"admin/app/models.(*Menu).Validate": { 
-			19: "menu.Name",
-			20: "menu.Name",
-			21: "menu.Pid",
-			22: "menu.Url",
-			23: "menu.Order",
+			21: "menu.Name",
+			22: "menu.Name",
+			23: "menu.Pid",
+			24: "menu.Url",
+			25: "menu.Order",
 		},
 		"admin/app/models.(*Password).ValidatePassword": { 
+			64: "P.Password",
+			65: "P.PasswordConfirm",
 			67: "P.Password",
-			68: "P.PasswordConfirm",
-			70: "P.Password",
-			71: "P.Password",
+			68: "P.Password",
 		},
 	}
 	revel.TestSuites = []interface{}{ 

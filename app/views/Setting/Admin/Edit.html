@@ -1,0 +1,77 @@
+{{template "public/header.html" .}}
+<script language="javascript" src="/public/js/admin.js"></script>
+
+<body>
+	<div class="subnav">
+		<div class="content-menu ib-a blue line-x">
+			<a href='/Admin/'><em>管理员管理</em></a><span>|</span>
+			<a href='javascript:;' class="on"><em>编辑管理员</em></a>
+		</div>
+	</div>
+	<div class="pad_10">
+		<div class="common-form">
+			{{if .admin_info}}
+				{{$admin_info := .admin_info}}<!-- 获取当前管理员信息 -->
+				<form name="myform" action="/Admin/edit/" onsubmit="return form_edit_submit()" method="post" id="myform">
+					<table width="100%" class="table_form contentWrap">
+						<tr>
+							<td width="80"><strong>用户名：</strong></td>
+							<td><input type="text" name="username" id="username" value="{{$admin_info.Username}}"
+								class="input-text"></input></td>
+						</tr>
+						<tr>
+							<td><strong>密码：</strong></td>
+							<td><input type="password" name="password" id="password"
+								class="input-text"></input>
+								<div id="passwordTip" class="onShow">不修改密码请留空。</div>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>确认密码：</strong></td>
+							<td><input type="password" name="pwdconfirm" id="pwdconfirm"
+								class="input-text"></input>
+								<div id="passwordTip" class="onShow">不修改密码请留空。</div>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>E-mail：</strong></td>
+							<td><input type="text" name="email" value="{{$admin_info.Email}}"
+								class="input-text" id="email" size="30"></input></td>
+						</tr>
+
+						<tr>
+							<td><strong>真实姓名：</strong></td>
+							<td><input type="text" name="realname" value="{{$admin_info.Realname}}"
+								class="input-text" id="realname"></input></td>
+						</tr>
+						<tr>
+							<td><strong>所属角色：</strong></td>
+							<td>
+								<select id="roleid" name="roleid">
+									{{range .role_list}}
+										{{if eq .Id $admin_info.Roleid}}
+											<option value="{{.Id}}" selected>{{.Rolename}}</option>
+										{{else}}
+											<option value="{{.Id}}">{{.Rolename}}</option>
+										{{end}}
+									{{end}}
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>语言：</strong></td>
+							<td><select id="lang" name="lang">
+									<option {{if eq $admin_info.Lang "zh-cn"}}selected{{end}} value="zh-cn">中文 - 简体中文</option>
+									<option {{if eq $admin_info.Lang "en"}}selected{{end}} value="en">English</option>
+							</select></td>
+						</tr>
+					</table>
+					<div class="bk15"></div>
+					<input type="hidden" id="id" name="id" value="{{$admin_info.Id}}"></input>
+					<input name="dosubmit" type="submit" value="提交" class="button">
+				</form>
+			{{end}}
+		</div>
+	</div>
+</body>
+{{template "public/footer.html" .}}

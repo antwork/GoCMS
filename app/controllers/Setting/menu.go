@@ -224,7 +224,8 @@ func (c Menu) Edit(menu *models.Menu) revel.Result {
 			}
 		} else {
 			c.Flash.Error("编辑菜单失败")
-			return c.Redirect("/Menu/")
+			c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+			return c.Redirect("/Message/")
 		}
 	}
 }

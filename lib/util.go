@@ -25,3 +25,13 @@ func GetClientIP() string {
 	defer conn.Close()
 	return strings.Split(conn.LocalAddr().String(), ":")[0]
 }
+
+//元素是否包含在数组中
+func In_Array(s string, arr []string) bool {
+	for _, v := range arr {
+		if v == s {
+			return true
+		}
+	}
+	return false
+}

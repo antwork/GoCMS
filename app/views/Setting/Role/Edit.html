@@ -1,0 +1,76 @@
+{{template "public/header.html" .}}
+<link rel="stylesheet" type="text/css" href="/public/css/zTreeStyle.css">
+<script language="javascript" src="/public/js/role.js"></script>
+<script language="javascript" src="/public/js/ztree/jquery.ztree.core-3.5.js"></script>
+<script language="javascript" src="/public/js/ztree/jquery.ztree.excheck-3.5.js"></script>
+
+{{.tree}}
+<SCRIPT type="text/javascript">
+	<!--
+	var setting = {
+		check: {
+			enable: true
+		},
+		data: {
+			simpleData: {
+				enable: true
+			}
+		}
+	};
+	
+	
+	$(document).ready(function(){
+		$.fn.zTree.init($("#tree"), setting, zNodes);
+	});
+	//-->
+</SCRIPT>
+<body>
+	<div class="subnav">
+		<div class="content-menu ib-a blue line-x">
+			<a href='/Role/'><em>角色管理</em></a><span>|</span><a
+				href='javascript:;' class="on"><em>编辑角色</em></a>
+		</div>
+	</div>
+	<div class="pad_10">
+		<div class="common-form">
+			{{if .role_info}}
+				{{with .role_info}}
+					<form name="myform" action="/Role/edit/" method="post" onsubmit="return form_submit()" id="myform">
+						<table width="100%" class="table_form contentWrap">
+							<tr>
+								<td><strong>角色名称：</strong></td>
+								<td><input type="text" name="rolename"
+									value="{{.Rolename}}" class="input-text" id="rolename"></input></td>
+							</tr>
+							<tr>
+								<td><strong>角色描述：</strong></td>
+								<td><textarea name="desc" rows="2" cols="20"
+										id="desc" class="inputtext"
+										style="height: 100px; width: 500px;">{{.Desc}}</textarea></td>
+							</tr>
+							<tr>
+								<td><strong>所属权限：</strong></td>
+								<td>
+									<ul id="tree" class="ztree"></ul>
+								</td>
+							</tr>
+							<tr>
+								<td><strong>是否启用：</strong></td>
+								<td>
+									<input type="radio" name="status" {{if eq .Status 1}}checked{{end}} value="1"> 启用
+									<input type="radio" name="status" {{if eq .Status 0}}checked{{end}} value="0"> 禁止
+								</td>
+							</tr>
+						</table>
+
+						<div class="bk15"></div>
+						<input name="id" type="hidden" value="{{.Id}}">
+						<input type="hidden" id="data" name="data" value="" />
+						<input name="dosubmit" type="submit" value="提交" class="button">
+					</form>
+				{{end}}
+			{{end}}
+		</div>
+	</div>
+</body>
+{{template "public/footer.html" .}}

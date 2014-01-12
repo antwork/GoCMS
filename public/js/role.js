@@ -3,24 +3,12 @@
  */
 
 /**
- * 权限设置
- */
-function setting_role(roleid, rolename) {
-	art.dialog.open('/Role/priv_setting/' + roleid + '/', {
-		id : 'setting_role',
-		title : '设置《' + rolename + '》',
-		width : 700,
-		height : 500,
-		lock : true
-	});
-}
-
-/**
  * 表单提交
  * 
  * @returns {Boolean}
  */
 function form_submit() {
+
 	var rolename = $.trim($("#rolename").val());
 	if (rolename == '') {
 		$("#rolename").focus();
@@ -28,29 +16,34 @@ function form_submit() {
 		return false;
 	}
 
-	var description = $.trim($("#description").val());
-	if (description == '') {
-		$("#description").focus();
+	var desc = $.trim($("#desc").val());
+	if (desc == '') {
+		$("#desc").focus();
 		notice_tips("请输入角色描述!");
 		return false;
 	}
+
+	var tree = GetTreeCheckedAll();
+	if(tree=='') {
+		notice_tips("请选择所属权限!");
+		return false;
+	}else{
+		$("#data").val(tree);
+	}
+
 	return true;
 }
 
-/**
- * 栏目权限
- * 
- * @param roleid
- * @param rolename
- */
-function setting_cat_priv(roleid, rolename) {
-	art.dialog.open('/Role/setting_cat_priv/' + roleid + '/', {
-		id : 'setting_cat_priv',
-		title : '栏目权限《' + rolename + '》',
-		width : 700,
-		height : 500,
-		lock : true
-	});
+ //获取所有选中节点的值
+function GetTreeCheckedAll() {
+    var treeObj = $.fn.zTree.getZTreeObj("tree");
+    var nodes = treeObj.getCheckedNodes(true);
+    var msg = "";
+    for (var i = 0; i < nodes.length; i++) {
+        msg += nodes[i].id+",";
+    }
+    msg = msg.substring(0,msg.length-1)
+    return msg;
 }
 
 /**
@@ -68,14 +61,13 @@ function delete_role(roleid) {
 		$.ajax({
 			type : "POST",
 			url : "/Role/delete/",
-			data : "roleid=" + roleid,
-			success : function(html) {
-				var tmp = jQuery.parseJSON(html);
-				if (tmp.rtn_code == 0) {
+			data : "id=" + roleid,
+			success : function(tmp) {
+				if (tmp.status == 0) {
 					notice_tips("删除成功!");
 					window.location.reload();
 				} else {
-					notice_tips(tmp.content);
+					notice_tips(tmp.message);
 				}
 			}
 		});
@@ -88,15 +80,15 @@ function delete_role(roleid) {
  * 设置状态
  * 
  * @param roleid
- * @param disabled
+ * @param status
  */
-function set_disabled(roleid, disabled) {
+function setStatus(roleid, status) {
 	if (roleid == '') {
 		notice_tips("参数错误!");
 		return false;
 	}
 
-	if (disabled == 0) {
+	if (status == 1) {
 		var message = '你确定要启用这个角色及用户吗?';
 	} else {
 		var message = '你确定要禁用这个角色及用户吗?';
@@ -106,14 +98,13 @@ function set_disabled(roleid, disabled) {
 		$.ajax({
 			type : "POST",
 			url : "/Role/setStatus/",
-			data : "roleid=" + roleid + "&disabled=" + disabled,
-			success : function(html) {
-				var tmp = jQuery.parseJSON(html);
-				if (tmp.rtn_code == 0) {
+			data : "id=" + roleid + "&status=" + status,
+			success : function(tmp) {
+				if (tmp.status == 1) {
 					notice_tips("设置成功!");
 					window.location.reload();
 				} else {
-					notice_tips(tmp.content);
+					notice_tips(tmp.message);
 				}
 			}
 		});

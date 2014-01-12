@@ -2,6 +2,8 @@ package models
 
 //菜单管理
 import "strconv"
+import "strings"
+import "admin/lib"
 import "html/template"
 import "github.com/robfig/revel"
 
@@ -227,6 +229,57 @@ func (m *Menu) GetMenuOptionHtml(Id int64) template.HTML {
 			}
 		}
 	}
+
+	return template.HTML(Html)
+}
+
+//返回菜单树
+func (m *Menu) GetMenuTree(role string) template.HTML {
+	menus := make([]*Menu, 0)
+	Engine.Asc("order").Find(&menus)
+
+	//初始化菜单Map
+	menu_list := make(map[int64][]*Menu)
+
+	for _, menu := range menus {
+		if _, ok := menu_list[menu.Pid]; !ok {
+			menu_list[menu.Pid] = make([]*Menu, 0)
+		}
+		menu_list[menu.Pid] = append(menu_list[menu.Pid], menu)
+	}
+
+	//解析权限
+	arr_role := strings.Split(role, ",")
+
+	Html := "<SCRIPT type=\"text/javascript\">var zNodes =["
+
+	for _, menu := range menu_list[0] {
+
+		if lib.In_Array(strconv.FormatInt(menu.Id, 10), arr_role) {
+			Html += "{ id:" + strconv.FormatInt(menu.Id, 10) + ", pId:" + strconv.FormatInt(menu.Pid, 10) + ", name:'" + menu.Name + "', open:true, checked:true},"
+		} else {
+			Html += "{ id:" + strconv.FormatInt(menu.Id, 10) + ", pId:" + strconv.FormatInt(menu.Pid, 10) + ", name:'" + menu.Name + "', open:true},"
+		}
+
+		for _, menu_second := range menu_list[menu.Id] {
+			if lib.In_Array(strconv.FormatInt(menu_second.Id, 10), arr_role) {
+				Html += "{ id:" + strconv.FormatInt(menu_second.Id, 10) + ", pId:" + strconv.FormatInt(menu_second.Pid, 10) + ", name:'" + menu_second.Name + "', open:true, checked:true},"
+			} else {
+				Html += "{ id:" + strconv.FormatInt(menu_second.Id, 10) + ", pId:" + strconv.FormatInt(menu_second.Pid, 10) + ", name:'" + menu_second.Name + "', open:true},"
+			}
+
+			for _, menu_last := range menu_list[menu_second.Id] {
+				if lib.In_Array(strconv.FormatInt(menu_last.Id, 10), arr_role) {
+					Html += "{ id:" + strconv.FormatInt(menu_last.Id, 10) + ", pId:" + strconv.FormatInt(menu_last.Pid, 10) + ", name:'" + menu_last.Name + "', checked:true},"
+				} else {
+					Html += "{ id:" + strconv.FormatInt(menu_last.Id, 10) + ", pId:" + strconv.FormatInt(menu_last.Pid, 10) + ", name:'" + menu_last.Name + "'},"
+				}
+
+			}
+		}
+	}
+
+	Html += "];</SCRIPT>"
 
 	return template.HTML(Html)
 }

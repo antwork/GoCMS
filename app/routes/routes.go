@@ -195,6 +195,47 @@ func (_ tPublic) Message(
 }
 
 
+type tAdmin struct {}
+var Admin tAdmin
+
+
+func (_ tAdmin) Index(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("Admin.Index", args).Url
+}
+
+func (_ tAdmin) Add(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("Admin.Add", args).Url
+}
+
+func (_ tAdmin) Edit(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("Admin.Edit", args).Url
+}
+
+func (_ tAdmin) Delete(
+		admin interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "admin", admin)
+	return revel.MainRouter.Reverse("Admin.Delete", args).Url
+}
+
+
 type tMenu struct {}
 var Menu tMenu
 
@@ -233,6 +274,65 @@ func (_ tMenu) Delete(
 	
 	revel.Unbind(args, "menu", menu)
 	return revel.MainRouter.Reverse("Menu.Delete", args).Url
+}
+
+
+type tRole struct {}
+var Role tRole
+
+
+func (_ tRole) Index(
+		role interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "role", role)
+	return revel.MainRouter.Reverse("Role.Index", args).Url
+}
+
+func (_ tRole) Member(
+		role interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "role", role)
+	return revel.MainRouter.Reverse("Role.Member", args).Url
+}
+
+func (_ tRole) Add(
+		role interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "role", role)
+	return revel.MainRouter.Reverse("Role.Add", args).Url
+}
+
+func (_ tRole) Edit(
+		role interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "role", role)
+	return revel.MainRouter.Reverse("Role.Edit", args).Url
+}
+
+func (_ tRole) SetStatus(
+		role interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "role", role)
+	return revel.MainRouter.Reverse("Role.SetStatus", args).Url
+}
+
+func (_ tRole) Delete(
+		role interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "role", role)
+	return revel.MainRouter.Reverse("Role.Delete", args).Url
 }
 
 

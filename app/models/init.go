@@ -33,8 +33,20 @@ func SetDB() {
 	if err != nil {
 		revel.WARN.Printf("错误: %v", err)
 	}
+
+	//缓存方式是存放到内存中，缓存struct的记录数为1000条
 	//cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)
 	//Engine.SetDefaultCacher(cacher)
+
 	//控制台打印SQL语句
 	//Engine.ShowSQL = true
+
+	//控制台打印调试信息
+	//Engine.ShowDebug = true
+
+	//控制台打印错误信息
+	//Engine.ShowErr = true
+
+	//控制台打印警告信息
+	//Engine.ShowWarn = true
 }
