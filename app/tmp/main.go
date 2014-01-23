@@ -9,19 +9,18 @@ import (
 	controllers "admin/app/controllers"
 	controllers0 "admin/app/controllers/Content"
 	controllers1 "admin/app/controllers/Extend"
-	controllers2 "admin/app/controllers/Logs"
-	controllers3 "admin/app/controllers/Module"
-	controllers4 "admin/app/controllers/Panel"
-	controllers5 "admin/app/controllers/Plugin"
-	controllers6 "admin/app/controllers/Public"
-	controllers7 "admin/app/controllers/Setting"
-	controllers8 "admin/app/controllers/Style"
-	controllers9 "admin/app/controllers/User"
+	controllers2 "admin/app/controllers/Module"
+	controllers3 "admin/app/controllers/Panel"
+	controllers4 "admin/app/controllers/Plugin"
+	controllers5 "admin/app/controllers/Public"
+	controllers6 "admin/app/controllers/Setting"
+	controllers7 "admin/app/controllers/Style"
+	controllers8 "admin/app/controllers/User"
 	models "admin/app/models"
 	tests "admin/tests"
-	controllers10 "github.com/robfig/revel/modules/static/app/controllers"
+	controllers9 "github.com/robfig/revel/modules/static/app/controllers"
 	_ "github.com/robfig/revel/modules/testrunner/app"
-	controllers11 "github.com/robfig/revel/modules/testrunner/app/controllers"
+	controllers10 "github.com/robfig/revel/modules/testrunner/app/controllers"
 )
 
 var (
@@ -101,21 +100,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers2.Logs)(nil),
-		[]*revel.MethodType{
-			&revel.MethodType{
-				Name: "Index",
-				Args: []*revel.MethodArg{ 
-				},
-				RenderArgNames: map[int][]string{ 
-					12: []string{ 
-					},
-				},
-			},
-			
-		})
-	
-	revel.RegisterController((*controllers3.Module)(nil),
+	revel.RegisterController((*controllers2.Module)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -130,7 +115,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers4.Panel)(nil),
+	revel.RegisterController((*controllers3.Panel)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -145,7 +130,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers5.Plugin)(nil),
+	revel.RegisterController((*controllers4.Plugin)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -160,7 +145,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers6.Ajax)(nil),
+	revel.RegisterController((*controllers5.Ajax)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Login",
@@ -204,7 +189,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers6.Captcha)(nil),
+	revel.RegisterController((*controllers5.Captcha)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -213,10 +198,17 @@ func main() {
 				RenderArgNames: map[int][]string{ 
 				},
 			},
+			&revel.MethodType{
+				Name: "GetCaptchaId",
+				Args: []*revel.MethodArg{ 
+				},
+				RenderArgNames: map[int][]string{ 
+				},
+			},
 			
 		})
 	
-	revel.RegisterController((*controllers6.Public)(nil),
+	revel.RegisterController((*controllers5.Public)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Map",
@@ -259,7 +251,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers7.Admin)(nil),
+	revel.RegisterController((*controllers6.Admin)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -267,9 +259,15 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					18: []string{ 
+					28: []string{ 
 						"title",
 						"admin_list",
+						"pages",
+					},
+					32: []string{ 
+						"title",
+						"admin_list",
+						"pages",
 					},
 				},
 			},
@@ -279,7 +277,7 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					31: []string{ 
+					47: []string{ 
 						"title",
 						"role_list",
 					},
@@ -291,12 +289,12 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					138: []string{ 
+					179: []string{ 
 						"title",
 						"admin_info",
 						"role_list",
 					},
-					140: []string{ 
+					181: []string{ 
 						"title",
 						"role_list",
 					},
@@ -313,7 +311,30 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers7.Menu)(nil),
+	revel.RegisterController((*controllers6.Logs)(nil),
+		[]*revel.MethodType{
+			&revel.MethodType{
+				Name: "Index",
+				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "logs", Type: reflect.TypeOf((**models.Logs)(nil)) },
+				},
+				RenderArgNames: map[int][]string{ 
+					47: []string{ 
+						"title",
+						"logs_list",
+						"pages",
+					},
+					53: []string{ 
+						"title",
+						"logs_list",
+						"pages",
+					},
+				},
+			},
+			
+		})
+	
+	revel.RegisterController((*controllers6.Menu)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -372,7 +393,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers7.Role)(nil),
+	revel.RegisterController((*controllers6.Role)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -380,9 +401,15 @@ func main() {
 					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					18: []string{ 
+					26: []string{ 
 						"title",
 						"role_list",
+						"pages",
+					},
+					30: []string{ 
+						"title",
+						"role_list",
+						"pages",
 					},
 				},
 			},
@@ -392,11 +419,17 @@ func main() {
 					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					38: []string{ 
+					61: []string{ 
 						"title",
 						"admin_list",
+						"pages",
 					},
-					40: []string{ 
+					65: []string{ 
+						"title",
+						"admin_list",
+						"pages",
+					},
+					69: []string{ 
 						"title",
 					},
 				},
@@ -407,7 +440,7 @@ func main() {
 					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					55: []string{ 
+					84: []string{ 
 						"title",
 						"tree",
 					},
@@ -419,13 +452,13 @@ func main() {
 					&revel.MethodArg{Name: "role", Type: reflect.TypeOf((**models.Role)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					129: []string{ 
+					158: []string{ 
 						"title",
 						"role_info",
 						"tree",
 						"Id",
 					},
-					135: []string{ 
+					164: []string{ 
 						"title",
 						"tree",
 					},
@@ -450,7 +483,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers7.Setting)(nil),
+	revel.RegisterController((*controllers6.Setting)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -465,7 +498,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers8.Style)(nil),
+	revel.RegisterController((*controllers7.Style)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -480,14 +513,14 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers9.User)(nil),
+	revel.RegisterController((*controllers8.User)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
 				Args: []*revel.MethodArg{ 
 				},
 				RenderArgNames: map[int][]string{ 
-					17: []string{ 
+					18: []string{ 
 						"title",
 					},
 				},
@@ -498,14 +531,16 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					25: []string{ 
+					29: []string{ 
 						"title",
+						"CaptchaId",
 					},
 				},
 			},
 			&revel.MethodType{
 				Name: "Logout",
 				Args: []*revel.MethodArg{ 
+					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
 				},
@@ -516,11 +551,11 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					102: []string{ 
+					151: []string{ 
 						"title",
 						"admin_info",
 					},
-					104: []string{ 
+					153: []string{ 
 						"title",
 					},
 				},
@@ -531,7 +566,7 @@ func main() {
 					&revel.MethodArg{Name: "admin", Type: reflect.TypeOf((**models.Admin)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					165: []string{ 
+					214: []string{ 
 						"title",
 					},
 				},
@@ -542,20 +577,26 @@ func main() {
 					&revel.MethodArg{Name: "menu", Type: reflect.TypeOf((**models.Menu)(nil)) },
 				},
 				RenderArgNames: map[int][]string{ 
-					246: []string{ 
+					306: []string{ 
 						"title",
 						"left_menu",
 					},
-					252: []string{ 
+					308: []string{ 
+						"title",
+					},
+					326: []string{ 
 						"title",
 						"left_menu",
+					},
+					328: []string{ 
+						"title",
 					},
 				},
 			},
 			
 		})
 	
-	revel.RegisterController((*controllers10.Static)(nil),
+	revel.RegisterController((*controllers9.Static)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Serve",
@@ -579,7 +620,7 @@ func main() {
 			
 		})
 	
-	revel.RegisterController((*controllers11.TestRunner)(nil),
+	revel.RegisterController((*controllers10.TestRunner)(nil),
 		[]*revel.MethodType{
 			&revel.MethodType{
 				Name: "Index",
@@ -615,12 +656,12 @@ func main() {
 	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"admin/app/models.(*Admin).Validate": { 
-			28: "a.Username",
-			29: "a.Username",
-			43: "a.Email",
-			44: "a.Email",
-			58: "a.Password",
-			59: "a.Password",
+			31: "a.Username",
+			32: "a.Username",
+			46: "a.Email",
+			47: "a.Email",
+			61: "a.Password",
+			62: "a.Password",
 		},
 		"admin/app/models.(*Menu).Validate": { 
 			21: "menu.Name",
@@ -630,10 +671,10 @@ func main() {
 			25: "menu.Order",
 		},
 		"admin/app/models.(*Password).ValidatePassword": { 
-			64: "P.Password",
-			65: "P.PasswordConfirm",
 			67: "P.Password",
-			68: "P.Password",
+			68: "P.PasswordConfirm",
+			70: "P.Password",
+			71: "P.Password",
 		},
 	}
 	revel.TestSuites = []interface{}{ 

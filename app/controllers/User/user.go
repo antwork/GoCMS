@@ -5,7 +5,8 @@ import "fmt"
 import "strconv"
 import "github.com/robfig/revel"
 import "admin/app/models"
-import "admin/lib"
+import "admin/utils"
+import "github.com/dchest/captcha"
 
 type User struct {
 	*revel.Controller
@@ -22,13 +23,25 @@ func (c *User) Login(admin *models.Admin) revel.Result {
 
 	if c.Request.Method == "GET" {
 		title := "登陆--GoCMS管理系统"
-		return c.Render(title)
+
+		CaptchaId := captcha.NewLen(6)
+
+		return c.Render(title, CaptchaId)
 	} else {
 		var username string = c.Params.Get("username")
 		var password string = c.Params.Get("password")
+
+		var captchaId string = c.Params.Get("captchaId")
 		var verify string = c.Params.Get("verify")
 
 		data := make(map[string]string)
+
+		if !captcha.VerifyString(captchaId, verify) {
+			data["status"] = "0"
+			data["url"] = "/"
+			data["message"] = "验证码错误!"
+			return c.RenderJson(data)
+		}
 
 		if len(username) <= 0 {
 			data["status"] = "0"
@@ -57,11 +70,29 @@ func (c *User) Login(admin *models.Admin) revel.Result {
 			data["status"] = "0"
 			data["url"] = "/"
 			data["message"] = "用户名错误!"
-		} else if username == admin_info.Username && lib.Md5(password) == admin_info.Password {
+		} else if admin_info.Status == 0 && admin_info.Id != 1 {
+			data["status"] = "0"
+			data["url"] = "/"
+			data["message"] = "此账号禁止登陆!"
+		} else if admin_info.Role.Status == 0 && admin_info.Id != 1 {
+			data["status"] = "0"
+			data["url"] = "/"
+			data["message"] = "所属角色禁止登陆!"
+		} else if username == admin_info.Username && utils.Md5(password) == admin_info.Password {
 			c.Session["UserID"] = fmt.Sprintf("%d", admin_info.Id)
 
-			c.Flash.Success("欢迎您 " + admin_info.Realname)
+			c.Flash.Success("登陆成功！欢迎您 " + admin_info.Realname)
 			c.Flash.Out["url"] = "/"
+
+			//更新登陆时间
+			admin.UpdateLoginTime(admin_info.Id)
+
+			//******************************************
+			//管理员日志
+			logs := new(models.Logs)
+			desc := "登陆用户名:" + admin_info.Username + "|^|登陆系统!|^|登陆ID:" + fmt.Sprintf("%d", admin_info.Id)
+			logs.Save(admin_info, c.Controller, desc)
+			//*****************************************
 
 			data["status"] = "1"
 			data["url"] = "/Message/"
@@ -77,9 +108,27 @@ func (c *User) Login(admin *models.Admin) revel.Result {
 }
 
 //退出登陆
-func (c *User) Logout() revel.Result {
-	for k := range c.Session {
-		delete(c.Session, k)
+func (c *User) Logout(admin *models.Admin) revel.Result {
+
+	if UserID, ok := c.Session["UserID"]; ok {
+
+		UserID, err := strconv.ParseInt(UserID, 10, 64)
+		if err != nil {
+			revel.WARN.Println(err)
+		}
+
+		admin_info := admin.GetById(UserID)
+
+		//******************************************
+		//管理员日志
+		logs := new(models.Logs)
+		desc := "登陆用户名:" + admin_info.Username + "|^|退出系统!|^|登陆ID:" + fmt.Sprintf("%d", admin_info.Id)
+		logs.Save(admin_info, c.Controller, desc)
+		//*****************************************
+
+		for k := range c.Session {
+			delete(c.Session, k)
+		}
 	}
 
 	c.Flash.Success("安全退出")
@@ -178,7 +227,7 @@ func (c *User) EditPwd(admin *models.Admin) revel.Result {
 
 			var old_password string = c.Params.Get("old_password")
 			if len(old_password) > 0 {
-				if admin_info.Password != lib.Md5(old_password) {
+				if admin_info.Password != utils.Md5(old_password) {
 					c.Flash.Error("旧密码不正确!")
 					c.Flash.Out["url"] = "/EditPwd/"
 					return c.Redirect("/Message/")
@@ -240,16 +289,44 @@ func (c *User) Left(menu *models.Menu) revel.Result {
 		if err != nil {
 			revel.WARN.Println(err)
 		}
-		//获取左侧导航菜单
-		left_menu := menu.GetLeftMenuHtml(Pid)
 
-		c.Render(title, left_menu)
+		if UserID, ok := c.Session["UserID"]; ok {
+
+			UserID, err := strconv.ParseInt(UserID, 10, 64)
+			if err != nil {
+				revel.WARN.Println(err)
+			}
+
+			admin := new(models.Admin)
+			admin_info := admin.GetById(UserID)
+
+			//获取左侧导航菜单
+			left_menu := menu.GetLeftMenuHtml(Pid, admin_info)
+
+			c.Render(title, left_menu)
+		} else {
+			c.Render(title)
+		}
 	} else {
 		//获取左侧导航菜单
 		//默认获取 我的面板
-		left_menu := menu.GetLeftMenuHtml(1)
+		if UserID, ok := c.Session["UserID"]; ok {
 
-		c.Render(title, left_menu)
+			UserID, err := strconv.ParseInt(UserID, 10, 64)
+			if err != nil {
+				revel.WARN.Println(err)
+			}
+
+			admin := new(models.Admin)
+			admin_info := admin.GetById(UserID)
+
+			//获取左侧导航菜单
+			left_menu := menu.GetLeftMenuHtml(1, admin_info)
+
+			c.Render(title, left_menu)
+		} else {
+			c.Render(title)
+		}
 	}
 	return c.RenderTemplate("Public/left.html")
 }

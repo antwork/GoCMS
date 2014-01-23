@@ -15,8 +15,9 @@
 					<th width="10%">ID</th>
 					<th width="15%" align="left">角色名称</th>
 					<!--<th width="15%" align="left">所属权限</th>-->
-					<th width="26%" align="left">角色描述</th>
+					<th width="20%" align="left">角色描述</th>
 					<th width="5%" align="left">状态</th>
+					<th width="15%" align="left">创建时间</th>
 					<th class="text-c">管理操作</th>
 				</tr>
 			</thead>
@@ -24,20 +25,22 @@
 				{{if .role_list}}
 					{{range .role_list}}
 					<tr>
-						<td width="5%" align="center">{{.Id}}</td>
-						<td width="30%">{{.Rolename}}</td>
+						<td align="center">{{.Id}}</td>
+						<td>{{.Rolename}}</td>
 						<!--<td width="30%">{{.Data}}</td>-->
-						<td width="10%">{{.Desc}}</td>
-						<td width="5%">
+						<td>{{.Desc}}</td>
+						<td>
 							{{if eq .Status 1}}
 								<a href="javascript:;" onclick="setStatus({{.Id}},0);"><font color="red">√</font></a>
 							{{else}}
 								<a href="javascript:;" onclick="setStatus({{.Id}},1);"><font color="blue">×</font></a>
 							{{end}}
 						</td>
+						<td>{{.Createtime}}</td>
 						<td class="text-c">
 							<a href="/Role/member/{{.Id}}/">成员管理</a> | 
 							<a href="/Role/edit/{{.Id}}/">修改</a> | 
+							
 							{{if eq .Id 1}}
 								<font color="#cccccc">删除</font>
 							{{else}}
@@ -49,6 +52,7 @@
 				{{end}}
 			</tbody>
 		</table>
+		<div id="pages">{{.pages}}</div>
 	</div>
 </body>
 {{template "public/footer.html" .}}

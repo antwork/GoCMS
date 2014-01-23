@@ -1,0 +1,84 @@
+{{template "public/header.html" .}}
+
+<link rel="stylesheet" type="text/css" href="/public/css/calendar/jscal2.css"/>
+<link rel="stylesheet" type="text/css" href="/public/css/calendar/border-radius.css"/>
+<link rel="stylesheet" type="text/css" href="/public/css/calendar/calendar-blue.css"/>
+<script type="text/javascript" src="/public/js/calendar/calendar.js"></script>
+<script type="text/javascript" src="/public/js/calendar/lang/en.js"></script>
+<script type="text/javascript" src="/public/js/logs.js"></script>
+
+<body>
+	<div class="subnav">
+	    <div class="content-menu ib-a blue line-x"></div>
+	</div>
+	<div class="pad_10">
+		<form name="searchform" action="" method="get">
+			<table width="100%" cellspacing="0" class="search-form">
+				<tbody>
+					<tr>
+						<td>
+							<div class="explain-col">
+								模块: 
+								<select id="module" name="module">
+									<option selected="" value="">不限模块</option>
+									<option value="User">User</option>
+									<option value="Menu">Menu</option>
+									<option value="Admin">Admin</option>
+									<option value="Logs">Logs</option>
+								</select>
+								用户名: <input type="text" value="" class="input-text" id="username" name="username"> 
+								真实姓名: <input type="text" value="" class="input-text" id="realname" name="realname"> 
+								开始时间: 
+								<input type="text" name="start_time" id="start_time" value="" size="20" class="date" readonly>&nbsp; 至 &nbsp; 
+								<input type="text" name="end_time" id="end_time" value="" size="20" class="date" readonly> 
+								<input type="button" onclick="Search()" value="搜索" class="button" name="dosubmit">
+								<input type="button" value="清空日志" onclick="delAll()" class="button" name="dosubmit">
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+		<div class="table-list">
+			<form name="myform" action="/Logs/search/" method="post">
+				<table width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th width="5%">序号</th>
+							<th width="5%" align="left">模块</th>
+							<th width="5%" align="left">用户名</th>
+							<th width="8%" align="left">真实姓名</th>
+							<th width="10%" align="left">操作地址</th>
+							<th width="10%" align="left">操作动作</th>
+							<th width="30%" align="left">操作内容</th>
+							<th width="10%" align="left">操作IP</th>
+							<th width="15%" align="left">操作时间</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{if .logs_list}}
+							{{range .logs_list}}
+								<tr>
+									<td align="center">{{.Id}}</td>
+									<td>{{.Module}}</td>
+									<td>{{.Admin.Username}}</td>
+									<td>{{.Admin.Realname}}</td>
+									<td>{{.Url}}</td>
+									<td>{{.Action}}</td>
+									<td>{{.Desc}}</td>
+									<td>{{.Ip}}</td>
+									<td>{{.Createtime}}</td>
+								</tr>
+							{{end}}
+						{{end}}
+					</tbody>
+				</table>
+				<div id="pages">
+					{{.pages}}
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
+{{template "public/footer.html" .}}

@@ -13,9 +13,23 @@ type Role struct {
 func (c Role) Index(role *models.Role) revel.Result {
 	title := "角色管理--GoCMS管理系统"
 
-	role_list := role.GetByAll()
+	var page string = c.Params.Get("page")
 
-	c.Render(title, role_list)
+	if len(page) > 0 {
+		Page, err := strconv.ParseInt(page, 10, 64)
+		if err != nil {
+			revel.WARN.Println(err)
+		}
+
+		role_list, pages := role.GetByAll(Page, 10)
+
+		c.Render(title, role_list, pages)
+	} else {
+		role_list, pages := role.GetByAll(1, 10)
+
+		c.Render(title, role_list, pages)
+	}
+
 	return c.RenderTemplate("Setting/Role/Index.html")
 }
 
@@ -24,6 +38,7 @@ func (c Role) Member(role *models.Role) revel.Result {
 	title := "成员管理--GoCMS管理系统"
 
 	var id string = c.Params.Get("id")
+	var page string = c.Params.Get("page")
 
 	if len(id) > 0 {
 		Id, err := strconv.ParseInt(id, 10, 64)
@@ -31,11 +46,25 @@ func (c Role) Member(role *models.Role) revel.Result {
 			revel.WARN.Println(err)
 		}
 
+		where := make(map[string]string)
+
 		admin := new(models.Admin)
 
-		admin_list := admin.GetByAll(Id)
+		if len(page) > 0 {
+			Page, err := strconv.ParseInt(page, 10, 64)
+			if err != nil {
+				revel.WARN.Println(err)
+			}
 
-		c.Render(title, admin_list)
+			admin_list, pages := admin.GetByAll(Id, where, Page, 10)
+
+			c.Render(title, admin_list, pages)
+		} else {
+			admin_list, pages := admin.GetByAll(Id, where, 1, 10)
+
+			c.Render(title, admin_list, pages)
+		}
+
 	} else {
 		c.Render(title)
 	}

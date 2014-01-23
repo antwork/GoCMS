@@ -14,7 +14,13 @@ type Captcha struct {
 //首页
 func (c *Captcha) Index() revel.Result {
 	captcha.Server(250, 62)
-	CaptchaId := captcha.NewLen(6)
+	var CaptchaId string = c.Params.Get("CaptchaId")
 	captcha.WriteImage(c.Response.Out, CaptchaId, 250, 62)
 	return nil
+}
+
+//返回验证码
+func (c *Captcha) GetCaptchaId() revel.Result {
+	CaptchaId := captcha.NewLen(6)
+	return c.RenderText(CaptchaId)
 }

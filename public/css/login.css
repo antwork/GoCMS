@@ -63,7 +63,7 @@ img {
     width: 30px;
     height: 44px;
     vertical-align: top;
-    background: url(../img/login_logo.png) no-repeat 0 0 ;
+    background: url(/public/img/login_logo.png) no-repeat 0 0 ;
 }
 .login-form .check-tips {
     color: #ff0000;
@@ -93,7 +93,7 @@ img {
     width: 24px;
     height: 24px;
     vertical-align: middle;
-    background: url("../img/icon24_login.png") no-repeat;
+    background: url("/public/img/icon24_login.png") no-repeat;
 }
 .login-form .icon-login-user {
     background-position: 0 0;
@@ -188,7 +188,7 @@ img {
     width: 16px;
     height: 16px;
     vertical-align: -3px;
-    background: url(../img/loading_icon.gif) no-repeat 0 0;
+    background: url(/public/img/loading_icon.gif) no-repeat 0 0;
 }
 
 /* 底部 */
@@ -227,7 +227,7 @@ input:-webkit-autofill {
 .logo-img {
     margin: -20px 0 9px 0;;
     height: 49px;
-    background: url(../img/logo.png) no-repeat 0 center;
+    background: url(/public/img/logo.png) no-repeat 0 center;
 }
 
 .welcome{

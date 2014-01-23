@@ -1,9 +1,10 @@
 package models
 
 //管理员表
-import "admin/lib"
 import "time"
 import "regexp"
+import "admin/utils"
+import "html/template"
 import "github.com/robfig/revel"
 
 type Admin struct {
@@ -17,6 +18,8 @@ type Admin struct {
 	Email         string `xorm:"varchar(32)"`
 	Realname      string `xorm:"varchar(32)"`
 	Lang          string `xorm:"varchar(6)"`
+	Status        int64  `xorm:"bool"`
+	Createtime    string `xorm:"DateTime"`
 }
 
 type Password struct {
@@ -25,12 +28,12 @@ type Password struct {
 }
 
 func (a *Admin) Validate(v *revel.Validation) {
-	v.Required(a.Username).Message("请输入用户名")
-	valid := v.Match(a.Username, regexp.MustCompile("^\\w*$")).Message("只能使用字母、数字和下划线")
+	v.Required(a.Username).Message("请输入用户名!")
+	valid := v.Match(a.Username, regexp.MustCompile("^\\w*$")).Message("只能使用字母、数字和下划线!")
 	if valid.Ok {
 		if a.HasName() {
 			err := &revel.ValidationError{
-				Message: "该用户名已经注册过",
+				Message: "该用户名已经注册过!",
 				Key:     "a.Username",
 			}
 			valid.Error = err
@@ -41,11 +44,11 @@ func (a *Admin) Validate(v *revel.Validation) {
 	}
 
 	v.Required(a.Email).Message("请输入Email")
-	valid = v.Email(a.Email).Message("无效的电子邮件")
+	valid = v.Email(a.Email).Message("无效的电子邮件!")
 	if valid.Ok {
 		if a.HasEmail() {
 			err := &revel.ValidationError{
-				Message: "该邮件已经注册过",
+				Message: "该邮件已经注册过!",
 				Key:     "a.Email",
 			}
 			valid.Error = err
@@ -55,44 +58,88 @@ func (a *Admin) Validate(v *revel.Validation) {
 		}
 	}
 
-	v.Required(a.Password).Message("请输入密码")
-	v.MinSize(a.Password, 3).Message("密码最少三位")
+	v.Required(a.Password).Message("请输入密码!")
+	v.MinSize(a.Password, 3).Message("密码最少三位!")
 }
 
 //验证密码
 func (P *Password) ValidatePassword(v *revel.Validation) {
-	v.Required(P.Password).Message("请输入密码")
-	v.Required(P.PasswordConfirm).Message("请输入确认密码")
+	v.Required(P.Password).Message("请输入密码!")
+	v.Required(P.PasswordConfirm).Message("请输入确认密码!")
 
-	v.MinSize(P.Password, 6).Message("密码最少六位")
+	v.MinSize(P.Password, 6).Message("密码最少六位!")
 	v.Required(P.Password == P.PasswordConfirm).Message("两次密码不相同!")
 }
 
 //获取管理员列表
-func (a *Admin) GetByAll(RoleId int64) []*Admin {
+func (a *Admin) GetByAll(RoleId int64, where map[string]string, Page int64, Perpage int64) ([]*Admin, template.HTML) {
 	admin_list := []*Admin{}
 
 	if RoleId > 0 {
-		Engine.Where("roleid=?", RoleId).Find(&admin_list)
-	} else {
-		Engine.Find(&admin_list)
-	}
 
-	if len(admin_list) > 0 {
-		role := new(Role)
-
-		for i, v := range admin_list {
-			admin_list[i].Role = role.GetById(v.Roleid)
+		//查询总数
+		admin := new(Admin)
+		Total, err := Engine.Where("roleid=?", RoleId).Count(admin)
+		if err != nil {
+			revel.WARN.Printf("错误: %v", err)
 		}
-	}
 
-	return admin_list
+		//分页
+		Pager := new(utils.Page)
+		Pager.SubPage_link = "/Admin/"
+		Pager.Nums = Total
+		Pager.Perpage = Perpage
+		Pager.Current_page = Page
+		Pager.SubPage_type = 2
+		pages := Pager.Show()
+
+		Engine.Where("roleid=?", RoleId).Limit(int(Perpage), int((Page-1)*Pager.Perpage)).Find(&admin_list)
+
+		if len(admin_list) > 0 {
+			role := new(Role)
+
+			for i, v := range admin_list {
+				admin_list[i].Role = role.GetById(v.Roleid)
+			}
+		}
+
+		return admin_list, pages
+	} else {
+
+		//查询总数
+		admin := new(Admin)
+		Total, err := Engine.Count(admin)
+		if err != nil {
+			revel.WARN.Printf("错误: %v", err)
+		}
+
+		//分页
+		Pager := new(utils.Page)
+		Pager.SubPage_link = "/Admin/"
+		Pager.Nums = Total
+		Pager.Perpage = Perpage
+		Pager.Current_page = Page
+		Pager.SubPage_type = 2
+		pages := Pager.Show()
+
+		Engine.Limit(int(Perpage), int((Page-1)*Pager.Perpage)).Find(&admin_list)
+
+		if len(admin_list) > 0 {
+			role := new(Role)
+
+			for i, v := range admin_list {
+				admin_list[i].Role = role.GetById(v.Roleid)
+			}
+		}
+
+		return admin_list, pages
+	}
 }
 
 func (a *Admin) HasName() bool {
 
 	admin := new(Admin)
-	has, err := Engine.Where("email=?", a.Username).Get(admin)
+	has, err := Engine.Where("username=?", a.Username).Get(admin)
 	if err != nil {
 		revel.WARN.Printf("错误: %v", has)
 		revel.WARN.Printf("错误: %v", err)
@@ -131,6 +178,9 @@ func (a *Admin) GetById(Id int64) *Admin {
 	if err != nil {
 		revel.WARN.Println(has)
 		revel.WARN.Printf("错误: %v", err)
+	} else {
+		role := new(Role)
+		admin.Role = role.GetById(admin.Roleid)
 	}
 
 	return admin
@@ -144,6 +194,9 @@ func (a *Admin) GetByName(name string) *Admin {
 	if err != nil {
 		revel.WARN.Println(has)
 		revel.WARN.Printf("错误: %v", err)
+	} else {
+		role := new(Role)
+		admin.Role = role.GetById(admin.Roleid)
 	}
 
 	return admin
@@ -154,13 +207,15 @@ func (a *Admin) Save() bool {
 
 	admin := new(Admin)
 	admin.Username = a.Username
-	admin.Password = lib.Md5(a.Password)
+	admin.Password = utils.Md5(a.Password)
 	admin.Roleid = a.Roleid
-	admin.Lastloginip = lib.GetClientIP()
+	admin.Lastloginip = utils.GetClientIP()
 	admin.Email = a.Email
 	admin.Realname = a.Realname
 	admin.Lang = a.Lang
-	admin.Lastlogintime = time.Now().Format("2006-01-02 15:04:04")
+	admin.Lastlogintime = "0000-00-00 00:00:00"
+	admin.Status = a.Status
+	admin.Createtime = time.Now().Format("2006-01-02 15:04:04")
 
 	has, err := Engine.Insert(admin)
 	if err != nil {
@@ -168,6 +223,23 @@ func (a *Admin) Save() bool {
 		revel.WARN.Printf("错误: %v", err)
 		return false
 	}
+	return true
+}
+
+// 更新登陆时间
+func (a *Admin) UpdateLoginTime(Id int64) bool {
+	admin := new(Admin)
+
+	admin.Lastloginip = utils.GetClientIP()
+	admin.Lastlogintime = time.Now().Format("2006-01-02 15:04:04")
+
+	has, err := Engine.Id(Id).Cols("lastloginip", "lastlogintime").Update(admin)
+	if err != nil {
+		revel.WARN.Println(has)
+		revel.WARN.Printf("错误: %v", err)
+		return false
+	}
+
 	return true
 }
 
@@ -181,7 +253,7 @@ func (a *Admin) Edit(Id int64) bool {
 	}
 
 	if len(a.Password) > 0 {
-		admin.Password = lib.Md5(a.Password)
+		admin.Password = utils.Md5(a.Password)
 	}
 
 	if a.Roleid > 0 {
@@ -200,15 +272,24 @@ func (a *Admin) Edit(Id int64) bool {
 		admin.Lang = a.Lang
 	}
 
-	admin.Lastloginip = lib.GetClientIP()
-	admin.Lastlogintime = time.Now().Format("2006-01-02 15:04:04")
+	admin.Status = a.Status
 
-	has, err := Engine.Id(Id).Update(admin)
-	if err != nil {
-		revel.WARN.Println(has)
-		revel.WARN.Printf("错误: %v", err)
-		return false
+	if len(a.Password) > 0 {
+		has, err := Engine.Id(Id).Cols("username", "password", "email", "realname", "roleid", "lang", "status").Update(admin)
+		if err != nil {
+			revel.WARN.Println(has)
+			revel.WARN.Printf("错误: %v", err)
+			return false
+		}
+	} else {
+		has, err := Engine.Id(Id).Cols("username", "email", "realname", "roleid", "lang", "status").Update(admin)
+		if err != nil {
+			revel.WARN.Println(has)
+			revel.WARN.Printf("错误: %v", err)
+			return false
+		}
 	}
+
 	return true
 }
 

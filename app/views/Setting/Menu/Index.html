@@ -8,28 +8,26 @@
 				href='/Menu/add/'><em>添加菜单</em></a>
 		</div>
 	</div>
-	<form name="myform" action="/Menu/listorder/" method="post">
-		<div class="pad-lr-10">
-			<div class="table-list">
-				<table width="100%" cellspacing="0">
-					<thead>
-						<tr>
-							<th width="30%">菜单名称</th>
-							<th width="5%">排序</th>
-							<th width="25%">功能地址</th>
-							<th width="15%">状态</th>
-							<th width="25%">管理操作</th>
-						</tr>
-					</thead>
-					<tbody>
-					{{if .menus}}
-						{{.menus}}
-					{{end}}
-					</tbody>
-				</table>
-			</div>
+	<div class="pad-lr-10">
+		<div class="table-list">
+			<table width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th width="30%">菜单名称</th>
+						<th width="5%">排序</th>
+						<th width="25%">功能地址</th>
+						<th width="15%">状态</th>
+						<th width="25%">管理操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				{{if .menus}}
+					{{.menus}}
+				{{end}}
+				</tbody>
+			</table>
 		</div>
-	</form>
+	</div>
 	<div id="pages"></div>
 </body>
 <script type="text/javascript">

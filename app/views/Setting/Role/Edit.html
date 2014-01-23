@@ -35,7 +35,7 @@
 		<div class="common-form">
 			{{if .role_info}}
 				{{with .role_info}}
-					<form name="myform" action="/Role/edit/" method="post" onsubmit="return form_submit()" id="myform">
+					<form name="myform" action="{{url "Role.Edit"}}" method="post" onsubmit="return form_submit()" id="myform">
 						<table width="100%" class="table_form contentWrap">
 							<tr>
 								<td><strong>角色名称：</strong></td>

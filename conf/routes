@@ -21,17 +21,24 @@ GET     /Menu/edit/:id/                         Menu.Edit
 
 #管理员管理
 GET     /Admin/                              	Admin.Index
+GET     /Admin/:page/                           Admin.Index
 GET     /Admin/add/                          	Admin.Add
 GET     /Admin/edit/:id/                        Admin.Edit
 POST    /Admin/delete/                        	Admin.Delete
 
 #角色管理
 GET     /Role/                              	Role.Index
+GET     /Role/:page/                            Role.Index
 GET     /Role/add/                          	Role.Add
 GET     /Role/edit/:id/                         Role.Edit
+GET     /Role/member/:id/:page/                 Role.Member
 GET     /Role/member/:id/                       Role.Member
 POST    /Role/delete/                        	Role.Delete
 POST    /Role/setStatus/                        Role.setStatus
+
+#日志管理
+GET     /Logs/                              	Logs.Index
+GET     /Logs/:page/                            Logs.Index
 
 # 我的面板
 GET     /Panel/                              	Panel.Index
@@ -66,7 +73,8 @@ GET     /Left/                              	User.Left
 POST    /Left/                              	User.Left
 
 #验证码
-GET     /Captcha/                       		Captcha.Index
+GET     /Captcha/:CaptchaId/                 	Captcha.Index
+GET     /Captcha/GetCaptchaId/                 	Captcha.GetCaptchaId
 
 #公共
 GET     /Map/                       			Public.Map

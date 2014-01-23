@@ -14,6 +14,7 @@
             <div class="login-body">
                 <div class="login-main pr">
                     <form action="{{url "User.Login"}}" method="post" class="login-form">
+                        <input type="hidden" name="captchaId" value="{{.CaptchaId}}"><br>
                         <h3 class="welcome"><i class="login-logo"></i>GoCMS管理平台</h3>
                         <div id="itemBox" class="item-box">
                             <div class="item">
@@ -33,7 +34,7 @@
                             </div>
                             <span class="placeholder_copy placeholder_check">请填写验证码</span>
                             <div>
-                                <img class="verifyimg reloadverify" alt="点击切换" src="/Captcha/">
+                                <img class="verifyimg reloadverify" alt="点击切换" src="/Captcha/{{.CaptchaId}}/">
                             </div>
                         </div>
                         <div class="login_btn_panel">
@@ -75,7 +76,9 @@
     			} else {
     				self.find(".check-tips").text(data.message);
     				//刷新验证码
-    				$(".reloadverify").click();
+
+    				var verifyimg = $(".verifyimg").attr("src");
+                     $(".verifyimg").attr("src", verifyimg);
     			}
     		}
     	});
@@ -83,23 +86,20 @@
 		$(function(){
 			//初始化选中用户名输入框
 			$("#itemBox").find("input[name=username]").focus();
+
 			//刷新验证码
-			var verifyimg = $(".verifyimg").attr("src");
             $(".reloadverify").click(function(){
-                if( verifyimg.indexOf('?')>0){
-                    $(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
-                }else{
-                    $(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
-                }
+                window.location.reload();
             });
 
             //placeholder兼容性
-                //如果支持 
+            //如果支持 
             function isPlaceholer(){
                 var input = document.createElement('input');
                 return "placeholder" in input;
             }
-                //如果不支持
+
+            //如果不支持
             if(!isPlaceholer()){
                 $(".placeholder_copy").css({
                     display:'block'

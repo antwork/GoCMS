@@ -56,18 +56,6 @@ func (_ tExtend) Index(
 }
 
 
-type tLogs struct {}
-var Logs tLogs
-
-
-func (_ tLogs) Index(
-		) string {
-	args := make(map[string]string)
-	
-	return revel.MainRouter.Reverse("Logs.Index", args).Url
-}
-
-
 type tModule struct {}
 var Module tModule
 
@@ -159,6 +147,13 @@ func (_ tCaptcha) Index(
 	return revel.MainRouter.Reverse("Captcha.Index", args).Url
 }
 
+func (_ tCaptcha) GetCaptchaId(
+		) string {
+	args := make(map[string]string)
+	
+	return revel.MainRouter.Reverse("Captcha.GetCaptchaId", args).Url
+}
+
 
 type tPublic struct {}
 var Public tPublic
@@ -233,6 +228,20 @@ func (_ tAdmin) Delete(
 	
 	revel.Unbind(args, "admin", admin)
 	return revel.MainRouter.Reverse("Admin.Delete", args).Url
+}
+
+
+type tLogs struct {}
+var Logs tLogs
+
+
+func (_ tLogs) Index(
+		logs interface{},
+		) string {
+	args := make(map[string]string)
+	
+	revel.Unbind(args, "logs", logs)
+	return revel.MainRouter.Reverse("Logs.Index", args).Url
 }
 
 
@@ -381,9 +390,11 @@ func (_ tUser) Login(
 }
 
 func (_ tUser) Logout(
+		admin interface{},
 		) string {
 	args := make(map[string]string)
 	
+	revel.Unbind(args, "admin", admin)
 	return revel.MainRouter.Reverse("User.Logout", args).Url
 }
 

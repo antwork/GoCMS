@@ -2,7 +2,7 @@ package controllers
 
 //AJAX操作
 import "strconv"
-import "admin/lib"
+import "admin/utils"
 import "github.com/robfig/revel"
 import "admin/app/models"
 
@@ -65,7 +65,7 @@ func (c *Ajax) ScreenUnlock(admin *models.Admin) revel.Result {
 
 		admin_info := admin.GetById(UserID)
 
-		if admin_info.Password != lib.Md5(lock_password) {
+		if admin_info.Password != utils.Md5(lock_password) {
 			return c.RenderText("3")
 		} else {
 			c.Session["lock_screen"] = "0"

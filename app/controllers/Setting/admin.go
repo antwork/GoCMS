@@ -13,9 +13,25 @@ type Admin struct {
 func (c Admin) Index(admin *models.Admin) revel.Result {
 	title := "管理员管理--GoCMS管理系统"
 
-	admin_list := admin.GetByAll(0)
+	var page string = c.Params.Get("page")
 
-	c.Render(title, admin_list)
+	where := make(map[string]string)
+
+	if len(page) > 0 {
+		Page, err := strconv.ParseInt(page, 10, 64)
+		if err != nil {
+			revel.WARN.Println(err)
+		}
+
+		admin_list, pages := admin.GetByAll(0, where, Page, 10)
+
+		c.Render(title, admin_list, pages)
+	} else {
+		admin_list, pages := admin.GetByAll(0, where, 1, 10)
+
+		c.Render(title, admin_list, pages)
+	}
+
 	return c.RenderTemplate("Setting/Admin/Index.html")
 }
 
@@ -26,7 +42,7 @@ func (c Admin) Add(admin *models.Admin) revel.Result {
 		title := "添加管理员--GoCMS管理系统"
 
 		role := new(models.Role)
-		role_list := role.GetByAll()
+		role_list := role.GetRoleList()
 
 		c.Render(title, role_list)
 		return c.RenderTemplate("Setting/Admin/Add.html")
@@ -37,6 +53,12 @@ func (c Admin) Add(admin *models.Admin) revel.Result {
 			admin.Username = username
 		} else {
 			c.Flash.Error("请输入用户名!")
+			c.Flash.Out["url"] = "/Admin/Add/"
+			return c.Redirect("/Message/")
+		}
+
+		if admin.HasName() {
+			c.Flash.Error("用户名“" + username + "”已存在！")
 			c.Flash.Out["url"] = "/Admin/Add/"
 			return c.Redirect("/Message/")
 		}
@@ -68,6 +90,12 @@ func (c Admin) Add(admin *models.Admin) revel.Result {
 			admin.Email = email
 		} else {
 			c.Flash.Error("请输入E-mail!")
+			c.Flash.Out["url"] = "/Admin/Add/"
+			return c.Redirect("/Message/")
+		}
+
+		if admin.HasEmail() {
+			c.Flash.Error("E-mail已存在！")
 			c.Flash.Out["url"] = "/Admin/Add/"
 			return c.Redirect("/Message/")
 		}
@@ -105,6 +133,19 @@ func (c Admin) Add(admin *models.Admin) revel.Result {
 			return c.Redirect("/Message/")
 		}
 
+		var status string = c.Params.Get("status")
+		if len(status) > 0 {
+			Status, err := strconv.ParseInt(status, 10, 64)
+			if err != nil {
+				revel.WARN.Println(err)
+			}
+			admin.Status = Status
+		} else {
+			c.Flash.Error("请选择状态!")
+			c.Flash.Out["url"] = "/Admin/Add/"
+			return c.Redirect("/Message/")
+		}
+
 		if admin.Save() {
 			c.Flash.Success("添加管理员成功!")
 			c.Flash.Out["url"] = "/Admin/"
@@ -123,7 +164,7 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 		title := "编辑管理员--GoCMS管理系统"
 
 		role := new(models.Role)
-		role_list := role.GetByAll()
+		role_list := role.GetRoleList()
 
 		var id string = c.Params.Get("id")
 
@@ -156,7 +197,7 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 				admin.Username = username
 			} else {
 				c.Flash.Error("请输入用户名!")
-				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 				return c.Redirect("/Message/")
 			}
 
@@ -169,7 +210,7 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 			if len(pwdconfirm) > 0 {
 				if password != pwdconfirm {
 					c.Flash.Error("两次输入密码不一致!")
-					c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+					c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 					return c.Redirect("/Message/")
 				}
 			}
@@ -179,7 +220,7 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 				admin.Email = email
 			} else {
 				c.Flash.Error("请输入E-mail!")
-				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 				return c.Redirect("/Message/")
 			}
 
@@ -188,7 +229,7 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 				admin.Realname = realname
 			} else {
 				c.Flash.Error("请输入真实姓名!")
-				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 				return c.Redirect("/Message/")
 			}
 
@@ -197,7 +238,7 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 				admin.Lang = lang
 			} else {
 				c.Flash.Error("请选择语言!")
-				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 				return c.Redirect("/Message/")
 			}
 
@@ -212,7 +253,20 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 				admin.Roleid = Roleid
 			} else {
 				c.Flash.Error("请选择所属角色!")
-				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
+				return c.Redirect("/Message/")
+			}
+
+			var status string = c.Params.Get("status")
+			if len(status) > 0 {
+				Status, err := strconv.ParseInt(status, 10, 64)
+				if err != nil {
+					revel.WARN.Println(err)
+				}
+				admin.Status = Status
+			} else {
+				c.Flash.Error("请选择是否启用!")
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 				return c.Redirect("/Message/")
 			}
 
@@ -222,12 +276,12 @@ func (c Admin) Edit(admin *models.Admin) revel.Result {
 				return c.Redirect("/Message/")
 			} else {
 				c.Flash.Error("编辑管理员失败!")
-				c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+				c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 				return c.Redirect("/Message/")
 			}
 		} else {
 			c.Flash.Error("编辑管理员失败!")
-			c.Flash.Out["url"] = "/Menu/Edit/" + id + "/"
+			c.Flash.Out["url"] = "/Admin/Edit/" + id + "/"
 			return c.Redirect("/Message/")
 		}
 

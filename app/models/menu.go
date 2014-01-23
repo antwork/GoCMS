@@ -3,7 +3,7 @@ package models
 //菜单管理
 import "strconv"
 import "strings"
-import "admin/lib"
+import "admin/utils"
 import "html/template"
 import "github.com/robfig/revel"
 
@@ -14,7 +14,7 @@ type Menu struct {
 	Url     string `xorm:"char(100)"`
 	Data    string `xorm:"varchar(60)"`
 	Order   int64  `xorm:"int(11)"`
-	Display int64  `xorm:"default(1)"`
+	Display int64  `xorm:"default 1"`
 }
 
 func (menu *Menu) Validate(v *revel.Validation) {
@@ -110,31 +110,26 @@ func (m *Menu) DelByID(Id int64) bool {
 }
 
 //按父ID查找菜单子项
-func (m *Menu) GetAdminMenu(Pid int64, with_self bool) map[int64]interface{} {
+func (m *Menu) GetAdminMenu(Pid int64, Admin_Info *Admin) []*Menu {
 
-	//初始化菜单Map
-	menu_list := make(map[int64]interface{})
-
+	//初始化菜单
 	menus := []*Menu{}
-	Engine.Where("Pid=? AND Display=?", Pid, 1).Find(&menus)
 
-	if len(menus) > 0 {
-		for _, menu := range menus {
-			menu_list[menu.Id] = menu
+	if Admin_Info.Id != 1 {
+		err := Engine.Where("Pid=? AND Display=? and id in ("+Admin_Info.Role.Data+")", Pid, 1).Find(&menus)
+
+		if err != nil {
+			revel.WARN.Printf("错误: %v", err)
+		}
+	} else {
+		err := Engine.Where("Pid=? AND Display=?", Pid, 1).Find(&menus)
+
+		if err != nil {
+			revel.WARN.Printf("错误: %v", err)
 		}
 	}
 
-	if with_self {
-		menus_model := []*Menu{}
-		Engine.Where("Pid!=? AND Display=?", Pid, 1).Find(&menus_model)
-		if len(menus_model) > 0 {
-			for _, menu := range menus_model {
-				menu_list[menu.Id] = menu
-			}
-		}
-	}
-
-	return menu_list
+	return menus
 }
 
 //获取所有菜单
@@ -157,10 +152,23 @@ func (m *Menu) GetMenuAll() map[int64][]*Menu {
 }
 
 //获取左侧导航菜单
-func (m *Menu) GetLeftMenuHtml(Pid int64) template.HTML {
+func (m *Menu) GetLeftMenuHtml(Pid int64, Admin_Info *Admin) template.HTML {
 
 	menus := make([]*Menu, 0)
-	Engine.Asc("order").Find(&menus)
+
+	if Admin_Info.Id != 1 {
+		err := Engine.Where("id in (" + Admin_Info.Role.Data + ")").Asc("order").Find(&menus)
+
+		if err != nil {
+			revel.WARN.Printf("错误: %v", err)
+		}
+	} else {
+		err := Engine.Asc("order").Find(&menus)
+
+		if err != nil {
+			revel.WARN.Printf("错误: %v", err)
+		}
+	}
 
 	//初始化菜单Map
 	menu_list := make(map[int64][]*Menu)
@@ -255,21 +263,21 @@ func (m *Menu) GetMenuTree(role string) template.HTML {
 
 	for _, menu := range menu_list[0] {
 
-		if lib.In_Array(strconv.FormatInt(menu.Id, 10), arr_role) {
+		if utils.In_Array(strconv.FormatInt(menu.Id, 10), arr_role) {
 			Html += "{ id:" + strconv.FormatInt(menu.Id, 10) + ", pId:" + strconv.FormatInt(menu.Pid, 10) + ", name:'" + menu.Name + "', open:true, checked:true},"
 		} else {
 			Html += "{ id:" + strconv.FormatInt(menu.Id, 10) + ", pId:" + strconv.FormatInt(menu.Pid, 10) + ", name:'" + menu.Name + "', open:true},"
 		}
 
 		for _, menu_second := range menu_list[menu.Id] {
-			if lib.In_Array(strconv.FormatInt(menu_second.Id, 10), arr_role) {
+			if utils.In_Array(strconv.FormatInt(menu_second.Id, 10), arr_role) {
 				Html += "{ id:" + strconv.FormatInt(menu_second.Id, 10) + ", pId:" + strconv.FormatInt(menu_second.Pid, 10) + ", name:'" + menu_second.Name + "', open:true, checked:true},"
 			} else {
 				Html += "{ id:" + strconv.FormatInt(menu_second.Id, 10) + ", pId:" + strconv.FormatInt(menu_second.Pid, 10) + ", name:'" + menu_second.Name + "', open:true},"
 			}
 
 			for _, menu_last := range menu_list[menu_second.Id] {
-				if lib.In_Array(strconv.FormatInt(menu_last.Id, 10), arr_role) {
+				if utils.In_Array(strconv.FormatInt(menu_last.Id, 10), arr_role) {
 					Html += "{ id:" + strconv.FormatInt(menu_last.Id, 10) + ", pId:" + strconv.FormatInt(menu_last.Pid, 10) + ", name:'" + menu_last.Name + "', checked:true},"
 				} else {
 					Html += "{ id:" + strconv.FormatInt(menu_last.Id, 10) + ", pId:" + strconv.FormatInt(menu_last.Pid, 10) + ", name:'" + menu_last.Name + "'},"

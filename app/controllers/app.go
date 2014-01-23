@@ -33,7 +33,7 @@ func (c App) Index(admin *models.Admin) revel.Result {
 
 		//导航菜单
 		menu := new(models.Menu)
-		c.RenderArgs["menus"] = menu.GetAdminMenu(0, false)
+		c.RenderArgs["menus"] = menu.GetAdminMenu(0, admin_info)
 
 		//登陆用户信息
 		c.RenderArgs["admin_info"] = admin_info

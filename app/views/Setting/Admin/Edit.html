@@ -12,7 +12,7 @@
 		<div class="common-form">
 			{{if .admin_info}}
 				{{$admin_info := .admin_info}}<!-- 获取当前管理员信息 -->
-				<form name="myform" action="/Admin/edit/" onsubmit="return form_edit_submit()" method="post" id="myform">
+				<form name="myform" action="{{url "Admin.Edit"}}" onsubmit="return form_edit_submit()" method="post" id="myform">
 					<table width="100%" class="table_form contentWrap">
 						<tr>
 							<td width="80"><strong>用户名：</strong></td>
@@ -64,6 +64,13 @@
 									<option {{if eq $admin_info.Lang "zh-cn"}}selected{{end}} value="zh-cn">中文 - 简体中文</option>
 									<option {{if eq $admin_info.Lang "en"}}selected{{end}} value="en">English</option>
 							</select></td>
+						</tr>
+						<tr>
+							<td><strong>状态：</strong></td>
+							<td>
+								<input type="radio" name="status" value="1" {{if eq $admin_info.Status 1}}checked{{end}}> 允许登陆 
+								<input type="radio" name="status" value="0" {{if eq $admin_info.Status 0}}checked{{end}}> 禁止登陆
+							</td>
 						</tr>
 					</table>
 					<div class="bk15"></div>

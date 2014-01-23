@@ -1,4 +1,4 @@
-package lib
+package utils
 
 //公共方法
 import "crypto/md5"
