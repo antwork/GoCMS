@@ -1,7 +1,7 @@
 GoCMS
 =====
 
-基于Revel,Jquery,XORM的开发的内容管理系统
+基于Revel,Jquery,XORM开发的内容管理系统
 
 Demo测试地址:http://admin.6574.com.cn/
 
